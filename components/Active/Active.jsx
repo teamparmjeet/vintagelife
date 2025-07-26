@@ -70,7 +70,7 @@ export default function Active({ userData }) {
     }
 
     try {
-      setLoading(true); // ✅ Start loading
+      setLoading(true); 
       const { data: updatedData } = await axios.patch("/api/user/update-user/", {
         id: userData._id,
         activesp: formData.activesp,
