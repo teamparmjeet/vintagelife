@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+
+
+:root {
+  --color-black: #2A3663;
+  --color-navy: #445D48;
+  --color-gray: #D8DBBD;
+  --color-white: #FAF6E3;
+}
+
+.bgb {
+  background-color: var(--color-black);
+}
+
+.bgn {
+  background-color: var(--color-navy);
+}
+
+.bgg {
+  background-color: var(--color-gray);
+}
+
+.bgw {
+  background-color: var(--color-white);
+}
+
+.hbgb:hover {
+  background-color: var(--color-gray);
+  color: var(--color-navy);
+}
+
+.textw {
+  color: var(--color-white);
+}
+
+.textn {
+  color: var(--color-navy);
+}
+.textb{
+  color: var(--color-black);
+
+}
+
+
+.bordernormal {
+  border: 2px solid var(--color-gray);
+}
+
+.borderw {
+  border-bottom: 4px solid var(--color-gray);
+}
+
+.borderwr {
+  border-right: 4px solid var(--color-gray);
+}
+
+.borderwl {
+  border-left: 4px solid var(--color-gray);
+}
+.bg-white{
+  background-color: white;
+}
+
+
+
+@keyframes wave {
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-12px) scale(1.2);
+  }
+}
+
+.animate-wave {
+  animation: wave 1.5s infinite ease-in-out;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+}
