@@ -223,9 +223,19 @@ export default function UserProfile() {
     </div>
 
     <div className="col-span-2 xl:col-span-1 flex justify-center xl:justify-start items-center">
+      
       <Link
         href={`./UserEdit/${userData.email}`}
-        className="text-blue-700 dark:text-blue-300 underline font-medium hover:text-blue-900 dark:hover:text-white"
+        className="border-blue-700 border rounded p-1  underline font-medium hover:bg-blue-200  text-xs text-blue-800 bg-blue-100"
+      >
+        Add/Remove Rp , Active After 1 Month
+      </Link>
+    </div>
+     <div className="col-span-2 xl:col-span-1 flex justify-center xl:justify-start items-center">
+      
+      <Link
+        href={`./UserEditdetails/${userData.email}`}
+        className="border-blue-700 border rounded p-1  underline font-medium hover:bg-blue-200  text-xs text-blue-800 bg-blue-100"
       >
         Edit User
       </Link>
