@@ -16,10 +16,13 @@ export default function Signin() {
   const [email, setEmail] = useState("");
   const [user, setUser] = useState("");
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData((prevState) => ({ ...prevState, [id]: value }));
-  };
+const handleChange = (e) => {
+  const { id, value } = e.target;
+  setFormData((prevState) => ({
+    ...prevState,
+    [id]: id === "dsid" ? value.toUpperCase() : value,
+  }));
+};
 
   const isFormValid = () => {
     return formData.dsid.trim() !== "" && formData.password.trim() !== "";
@@ -118,7 +121,7 @@ export default function Signin() {
                 icon={<LockKeyholeIcon size={18} className="textn" />}
                 value={formData.dsid}
                 onChange={handleChange}
-                className="pl-8 w-full bgg textn placeholder-gray-500 focus:ring-navy focus:border-navy"
+                className="pl-8 uppercase w-full bgg textn placeholder-gray-500 focus:ring-navy focus:border-navy"
                 required
                 disabled={loading}
               />

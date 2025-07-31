@@ -58,37 +58,40 @@ export default function Signup() {
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+   const handleChange = (e) => {
+    const { name, value } = e.target;
 
-        const addressFields = ['addressLine1', 'addressLine2', 'city', 'landmark', 'pinCode', 'state'];
+    const addressFields = ['addressLine1', 'addressLine2', 'city', 'landmark', 'pinCode', 'state'];
 
-        if (addressFields.includes(name)) {
-            setFormData((prev) => ({
-                ...prev,
-                address: {
-                    ...prev.address,
-                    [name]: value,
-                },
-            }));
-            setErrors((prev) => ({
-                ...prev,
-                address: {
-                    ...prev.address,
-                    [name]: '',
-                },
-            }));
-        } else {
-            setFormData((prev) => ({
-                ...prev,
-                [name]: value,
-            }));
-            setErrors((prev) => ({
-                ...prev,
+    const updatedValue = name === 'pdscode' ? value.toUpperCase() : value;
+
+    if (addressFields.includes(name)) {
+        setFormData((prev) => ({
+            ...prev,
+            address: {
+                ...prev.address,
+                [name]: updatedValue,
+            },
+        }));
+        setErrors((prev) => ({
+            ...prev,
+            address: {
+                ...prev.address,
                 [name]: '',
-            }));
-        }
-    };
+            },
+        }));
+    } else {
+        setFormData((prev) => ({
+            ...prev,
+            [name]: updatedValue,
+        }));
+        setErrors((prev) => ({
+            ...prev,
+            [name]: '',
+        }));
+    }
+};
+
 
 
 
@@ -551,7 +554,7 @@ export default function Signup() {
 
                             <div className="lg:col-span-1">
                                 <label className="text-gray-700 text-sm font-semibold">Reference Ds Id.</label>
-                                <input type="text" name="pdscode" value={formData.pdscode} onChange={handleChange} className="block w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md appearance-none placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm" required />
+                                <input type="text" name="pdscode" value={formData.pdscode} onChange={handleChange} className="block uppercase w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md appearance-none placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm" required />
                                 {errors.pdscode && <p className="text-red-500 text-xs">{errors.pdscode}</p>}
                             </div>
                             {/* <div className="lg:col-span-1">

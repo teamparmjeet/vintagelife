@@ -114,17 +114,17 @@ if (creationDate) {
                 // If not expired and KYC is complete, show the activation component.
                 <>
                     <Active userData={userData} />
-                    <p className="mt-6 text-green-700 bg-green-100 border border-green-300 px-4 py-3 rounded shadow">
+                    {/* <p className="mt-6 text-green-700 bg-green-100 border border-green-300 px-4 py-3 rounded shadow">
                         ✅ Your KYC is complete. You can now activate your account.
-                    </p>
+                    </p> */}
                 </>
             ) : (
                 // If not expired but KYC is incomplete, show the KYC message.
                  <>
                     <Active userData={userData} />
-                    <p className="mt-6 text-green-700 bg-green-100 border border-green-300 px-4 py-3 rounded shadow">
+                    {/* <p className="mt-6 text-green-700 bg-green-100 border border-green-300 px-4 py-3 rounded shadow">
                         ✅ Your KYC is complete. You can now activate your account.
-                    </p>
+                    </p> */}
                 </>
             )}
         </div>
