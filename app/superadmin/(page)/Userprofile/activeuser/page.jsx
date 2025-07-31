@@ -31,7 +31,7 @@ export default function Page() {
     const [date, setDate] = useState("");
 
     // State to hold the filters that are actually applied
-     const [appliedFilters, setAppliedFilters] = useState({
+    const [appliedFilters, setAppliedFilters] = useState({
         searchField: "dscode",
         searchValue: "",
         date: "",
@@ -94,7 +94,7 @@ export default function Page() {
 
     return (
         <div className="">
-            <div className="max-w-7xl mx-auto">
+            <div className=" mx-auto">
                 <header className="mb-2 text-center">
                     <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 dark:text-white">Active User Directory</h1>
 
@@ -218,6 +218,7 @@ const UserTable = React.memo(({ users }) => (
                 <th scope="col" className="px-6 py-4 hidden lg:table-cell">Activation Date</th>
                 <th scope="col" className="px-6 py-4">Status</th>
                 <th scope="col" className="px-6 py-4 text-right">Password</th>
+                <th scope="col" className="px-6 py-4 text-right">Dashboard</th>
                 <th scope="col" className="px-6 py-4 text-right">Action</th>
             </tr>
         </thead>
@@ -266,6 +267,16 @@ const UserTable = React.memo(({ users }) => (
                     <td className="px-6 py-4 text-right">
                         <span>{user.plainpassword}</span>
                     </td>
+                    <td className="px-6 py-4 text-right">
+                        <Link
+                            href={`/superadmin/Report/allreport/${user.dscode}?email=${encodeURIComponent(user.email)}`}
+                            className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+                        >
+                            <Eye size={14} />
+                            <span>View</span>
+                        </Link>
+                    </td>
+
                     <td className="px-6 py-4 text-right">
                         <Link href={`/superadmin/Userprofile/user/${user.email}`} className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
                             <Eye size={14} />
