@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import Link from 'next/link';
 
 export default function Bonanza() {
     const [data, setData] = useState(null);
@@ -69,13 +70,16 @@ export default function Bonanza() {
 
     return (
         <div className="flex flex-wrap justify-center gap-8 mt-8 px-4">
-            <div className="w-full text-center">
-                <h1 className="text-3xl font-bold font-serif textn underline ">
-                    Bonanza: {data.title}
-                </h1>
-                <p className="text-sm sm:text-base mt-2 textn">
-                    {formatDate(data.datefrom)} &mdash; {formatDate(data.dateto)}
-                </p>
+            <div className="w-full text-center bordernormal rounded overflow-hidden">
+                <Link href="./bonanza" className='relative'>
+                    <h1 className="text-3xl font-bold font-serif textn underline  ">
+                        Bonanza: {data.title}
+                    </h1>
+                    <p className="text-sm sm:text-base mt-2 textn">
+                        {formatDate(data.datefrom)} &mdash; {formatDate(data.dateto)}
+                    </p>
+                    <span className=' absolute bgn text-white px-2  top-0 right-0'>Click here</span>
+                </Link>
             </div>
             {['SAO', 'SGO'].map(type => {
                 const userSP = parseInt(userdata?.[`${type.toLowerCase()}sp`] || "0");

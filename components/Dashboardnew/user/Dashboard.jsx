@@ -100,92 +100,104 @@ export default function Dashboard() {
 
   const labelMap = panelData
     ? [
-        {
-          title: "RP",
-          count: panelData.mainUser?.saosp || 0,
-          color: "#3293ba",
-          Icon: Target,
-        },
-        // {
-        //   title: "SGO SP",
-        //   count: panelData.mainUser?.sgosp || 0,
-        //   color: "#f28430",
-        //   Icon: Target,
-        // },
-        {
-          title: "Total SAO",
-          count: panelData.totalSAO || 0,
-          color: "#5cba47",
-          Icon: Users,
-        },
-        {
-          title: "Total SGO",
-          count: panelData.totalSGO || 0,
-          color: "#a94dd6",
-          Icon: Users,
-        },
-        {
-          title: "Active SAO",
-          count: panelData.totalActiveSAO || 0,
-          color: "#ff7b7b",
-          Icon: UserCheck,
-        },
-        {
-          title: "Active SGO",
-          count: panelData.totalActiveSGO || 0,
-          color: "#2eb872",
-          Icon: UserCheck,
-        },
-        // {
-        //   title: "This Week SAO SP",
-        //   count: panelData.currentWeekSaoSP || 0,
-        //   color: "#ffb347",
-        //   Icon: Calendar,
-        // },
-        // {
-        //   title: "This Week SGO SP",
-        //   count: panelData.currentWeekSgoSP || 0,
-        //   color: "#7f55a3",
-        //   Icon: Calendar,
-        // },
-        // {
-        //   title: "Current Level",
-        //   count: panelData.mainUser?.level || 0,
-        //   color: "#4a4a4a",
-        //   Icon: Layers,
-        // },
-        {
-          title: "Direct SAO",
-          count: panelData.directSao || 0,
-          color: "#3b82f6",
-          Icon: UserPlus,
-        },
-        {
-          title: "Direct SGO",
-          count: panelData.directSgo || 0,
-          color: "#8b5cf6",
-          Icon: UserPlus,
-        },
-        // {
-        //   title: "Pair Matching Income",
-        //   count:
-        //     Math.min(
-        //       panelData.mainUser?.saosp ?? 0,
-        //       panelData.mainUser?.sgosp ?? 0
-        //     ) * 10,
-        //   color: "#d64d9b",
-        //   Icon: Wallet,
-        //   type: "currency",
-        // },
-        // {
-        //   title: "Royalty Income",
-        //   count: totalPerformance || 0,
-        //   color: "#eab308",
-        //   Icon: Award,
-        //   type: "currency",
-        // },
-      
-      ]
+      {
+        title: "RP",
+        count: panelData.mainUser?.saosp || 0,
+        color: "#3293ba",
+        Icon: Target,
+      },
+      // {
+      //   title: "SGO SP",
+      //   count: panelData.mainUser?.sgosp || 0,
+      //   color: "#f28430",
+      //   Icon: Target,
+      // },
+      {
+        title: "Total SAO",
+        count: panelData.totalSAO || 0,
+        color: "#5cba47",
+        Icon: Users,
+      },
+      {
+        title: "Total SGO",
+        count: panelData.totalSGO || 0,
+        color: "#a94dd6",
+        Icon: Users,
+      },
+      {
+        title: "Active SAO",
+        count: panelData.totalActiveSAO || 0,
+        color: "#ff7b7b",
+        Icon: UserCheck,
+      },
+      {
+        title: "Active SGO",
+        count: panelData.totalActiveSGO || 0,
+        color: "#2eb872",
+        Icon: UserCheck,
+      },
+      // {
+      //   title: "This Week SAO SP",
+      //   count: panelData.currentWeekSaoSP || 0,
+      //   color: "#ffb347",
+      //   Icon: Calendar,
+      // },
+      // {
+      //   title: "This Week SGO SP",
+      //   count: panelData.currentWeekSgoSP || 0,
+      //   color: "#7f55a3",
+      //   Icon: Calendar,
+      // },
+      // {
+      //   title: "Current Level",
+      //   count: panelData.mainUser?.level || 0,
+      //   color: "#4a4a4a",
+      //   Icon: Layers,
+      // },
+      {
+        title: "Direct SAO",
+        count: panelData.directSao || 0,
+        color: "#3b82f6",
+        Icon: UserPlus,
+      },
+      {
+        title: "Direct SGO",
+        count: panelData.directSgo || 0,
+        color: "#8b5cf6",
+        Icon: UserPlus,
+      },
+      {
+        title: "Current Weak Rp",
+        count: panelData.currentWeekSaoSP || 0,
+        color: "#8b5cf6",
+        Icon: Target,
+      },
+      // {
+      //   title: "Current Weak Sgo Rp",
+      //   count: panelData.currentWeekSgoSP || 0,
+      //   color: "#8b5cf6",
+      //   Icon: Target,
+      // },
+      // {
+      //   title: "Pair Matching Income",
+      //   count:
+      //     Math.min(
+      //       panelData.mainUser?.saosp ?? 0,
+      //       panelData.mainUser?.sgosp ?? 0
+      //     ) * 10,
+      //   color: "#d64d9b",
+      //   Icon: Wallet,
+      //   type: "currency",
+      // },
+      // {
+      //   title: "Royalty Income",
+      //   count: totalPerformance || 0,
+      //   color: "#eab308",
+      //   Icon: Award,
+      //   type: "currency",
+      // },
+
+    ]
     : [];
 
   return (

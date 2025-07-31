@@ -168,6 +168,19 @@ export default function Dashboard() {
         color: "#8b5cf6",
         Icon: UserPlus,
       },
+
+      {
+        title: "Current Weak Sao Rp",
+        count: panelData.currentWeekSaoSP || 0,
+        color: "#8b5cf6",
+        Icon: Target,
+      },
+      {
+        title: "Current Weak Sgo Rp",
+        count: panelData.currentWeekSgoSP || 0,
+        color: "#8b5cf6",
+        Icon: Target,
+      },
       {
         title: "Pair Matching Income",
         count:
@@ -211,9 +224,12 @@ export default function Dashboard() {
               type={item.type}
             />
           ))}
+        
+
+
         </div>
       )}
-      <Bonanza/>
+      <Bonanza />
     </div>
   );
 }
