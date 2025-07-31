@@ -19,8 +19,8 @@ export default function Page() {
     <>
       <Timer />
       <div className="flex flex-col space-y-2">
-      <Dashboard/>
-</div>
+        <Dashboard />
+      </div>
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center ">
           <div className="bg-white rounded-lg shadow-xl overflow-y-auto max-h-screen w-full md:w-4/5 lg:w-3/4 px-6 py-12 relative">

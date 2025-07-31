@@ -239,7 +239,8 @@ export default function Dashboard() {
 
         </div>
       )}
-      <Bonanza />
+     {session?.user?.dscode !== 'VL000001' && <Bonanza />}
+
     </div>
   );
 }
