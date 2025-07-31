@@ -2,13 +2,8 @@ import UserModel from "@/model/User";
 import dbConnect from "@/lib/dbConnect";
 import bcrypt from "bcryptjs";
 
-function generateRandomPassword(length = 8) {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
-    let password = '';
-    for (let i = 0; i < length; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return password;
+function generateRandomPassword() {
+    return Math.floor(1000 + Math.random() * 9000).toString(); // generates a 4-digit number like "8372"
 }
 
 export async function POST(req) {

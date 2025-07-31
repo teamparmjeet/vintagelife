@@ -362,7 +362,7 @@ export default function Page() {
 
         {userData?.usertype === "0" && (
           <div>
-            <label className="block mb-1 font-medium">Active User Without Sp</label>
+            <label className="block mb-1 font-medium">Active User Without Rp</label>
             <select
               className="w-full p-2 border rounded"
               value={formData.usertype}
@@ -372,12 +372,12 @@ export default function Page() {
             >
               <option value="">-- Select User Type --</option>
               <option value="1">Activate as 'User Without SP'</option>
-              <option value="100sp">Activate as '100 sp'</option>
+              <option value="100sp">Activate as '100 RP'</option>
             </select>
           </div>
         )}
         {/* Eligible Levels */}
-        <div>
+        {/* <div>
           <label className="block mb-1 font-medium">Eligible Levels (Optional)</label>
           <select
             className="w-full p-2 border rounded"
@@ -391,11 +391,11 @@ export default function Page() {
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
 
         {/* Add SP */}
         <div>
-          <label className="block mb-1 font-medium">Add SP (Optional)</label>
+          <label className="block mb-1 font-medium">Add RP (Optional)</label>
           <div className="flex gap-4">
             <select
               className="w-1/2 p-2 border rounded"
@@ -419,7 +419,7 @@ export default function Page() {
 
         {/* Remove SP */}
         <div>
-          <label className="block mb-1 font-medium">Remove SP (Optional)</label>
+          <label className="block mb-1 font-medium">Remove RP (Optional)</label>
           <div className="flex gap-4">
             <select
               className="w-1/2 p-2 border rounded"

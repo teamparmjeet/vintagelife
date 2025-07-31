@@ -159,11 +159,11 @@ export default function Signin() {
         </div>
 
         {/* Right Side: Image and Welcome Message */}
-        <div className="w-full md:w-1/2 bgn textw hidden md:block items-center justify-center p-8 md:p-12 order-1 md:order-2 border-b-4 md:border-b-0 md:border-l-4 border-gray">
+        <div className="w-full md:w-1/2  textw bgn hidden md:block items-center justify-center p-8 md:p-12 order-1 md:order-2 border-b-4 md:border-b-0 md:border-l-4 border-gray">
           <div className="text-center">
             <div className="flex justify-center mb-4">
               <Image
-                src="/images/user/sitelogo-removebg-preview.png"
+                src="/images/logo/logonew.png"
                 height={200}
                 width={200}
                 alt="Site Logo"

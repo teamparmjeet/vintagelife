@@ -120,12 +120,12 @@ if (creationDate) {
                 </>
             ) : (
                 // If not expired but KYC is incomplete, show the KYC message.
-                <div className="bg-yellow-100 border border-yellow-300 text-yellow-800 px-6 py-4 rounded-lg shadow-md text-center">
-                    <h2 className="text-xl font-semibold mb-2">Aadhaar KYC Not Verified</h2>
-                    <p>
-                        Your Aadhaar KYC is not verified yet. Please complete your KYC process to access this feature.
+                 <>
+                    <Active userData={userData} />
+                    <p className="mt-6 text-green-700 bg-green-100 border border-green-300 px-4 py-3 rounded shadow">
+                        ✅ Your KYC is complete. You can now activate your account.
                     </p>
-                </div>
+                </>
             )}
         </div>
     );

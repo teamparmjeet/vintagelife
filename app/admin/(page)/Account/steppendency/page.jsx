@@ -6,12 +6,12 @@ import { useSession } from "next-auth/react";
 const thdata = [
   "Step",
   "Level",
-  "Total SAOSP",
-  "Total SGOSP",
+  "Total SAORP",
+  "Total SGORP",
   "SAOSP",
   "SGOSP",
-  "Remain SAOSP",
-  "Remain SGOSP",
+  "Remain SAORP",
+  "Remain SGORP",
   "Status",
 ];
 

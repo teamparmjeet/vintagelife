@@ -107,9 +107,9 @@ export default function PendingOrders() {
               <th className="border border-gray-300 px-4 py-2">Order No</th>
               <th className="border border-gray-300 px-4 py-2">Mobile</th>
               <th className="border border-gray-300 px-4 py-2">Payment Mode</th>
-              <th className="border border-gray-300 px-4 py-2">Sale Group</th>
+              {/* <th className="border border-gray-300 px-4 py-2">Sale Group</th> */}
               <th className="border border-gray-300 px-4 py-2">Total Amount</th>
-              <th className="border border-gray-300 px-4 py-2">Total Sp</th>
+              <th className="border border-gray-300 px-4 py-2">Total RP</th>
               <th className="border border-gray-300 px-4 py-2">Date</th>
               <th className="border border-gray-300 px-4 py-2">Status</th>
               <th className="border border-gray-300 px-4 py-2">Action</th>
@@ -122,7 +122,7 @@ export default function PendingOrders() {
                   <td className="border border-gray-300 px-4 py-2">{order.orderNo}</td>
                   <td className="border border-gray-300 px-4 py-2">{order.mobileno}</td>
                   <td className="border border-gray-300 px-4 py-2">{order.paymentmod}</td>
-                  <td className="border border-gray-300 px-4 py-2">{order.salegroup}</td>
+                  {/* <td className="border border-gray-300 px-4 py-2">{order.salegroup}</td> */}
                   <td className="border border-gray-300 px-4 py-2">{order.netamount}</td>
                   <td className="border border-gray-300 px-4 py-2">{order.totalsp}</td>
                   <td className="border border-gray-300 px-4 py-2">{new Date(order.date).toLocaleDateString("en-GB")}</td>

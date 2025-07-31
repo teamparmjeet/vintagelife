@@ -105,10 +105,10 @@ export default function Page() {
 
                 return (
                   <tr key={type} className="border-t border-gray-100 hover:bg-[#FFF7F0] transition">
-                    <td className="p-3 sm:p-4 font-medium">{type} SP</td>
-                    <td className="p-3 sm:p-4">{current} SP</td>
-                    <td className="p-3 sm:p-4">{target} SP</td>
-                    <td className="p-3 sm:p-4 text-rose-500 font-semibold">{remain} SP</td>
+                    <td className="p-3 sm:p-4 font-medium">{type} RP</td>
+                    <td className="p-3 sm:p-4">{current} RP</td>
+                    <td className="p-3 sm:p-4">{target} RP</td>
+                    <td className="p-3 sm:p-4 text-rose-500 font-semibold">{remain} RP</td>
                   </tr>
                 );
               })}

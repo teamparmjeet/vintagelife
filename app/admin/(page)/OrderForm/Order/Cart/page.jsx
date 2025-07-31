@@ -122,7 +122,7 @@ export default function Page() {
                                 <tr className="bg-gray-200 dark:bg-gray-900 text-gray-700 dark:text-white">
                                     <th className="py-2 px-4 border text-left">Product</th>
                                     <th className="py-2 px-4 border text-center">Quantity</th>
-                                    <th className="py-2 px-4 border text-center">Total SP</th>
+                                    <th className="py-2 px-4 border text-center">Total RP</th>
                                     <th className="py-2 px-4 border text-center">Total Price</th>
                                     <th className="py-2 px-4 border text-center"></th>
                                 </tr>
@@ -138,7 +138,7 @@ export default function Page() {
                                                 <br />
                                                 Price <span className="text-gray-600 dark:text-white">: {pd.price}</span>
                                                 <br />
-                                                Sp <span className="text-gray-600 dark:text-white">: {pd.sp}</span>
+                                                Rp <span className="text-gray-600 dark:text-white">: {pd.sp}</span>
                                             </td>
                                             <td className="py-2 px-4 border text-center">
                                                 <div className="flex items-center justify-center gap-2">
@@ -187,7 +187,7 @@ export default function Page() {
                                 </div>
 
                                 <div className="flex justify-between items-center text-base mb-6 px-1">
-                                    <span className="textw font-medium">Total SP:</span>
+                                    <span className="textw font-medium">Total RP:</span>
                                     <span className="textw font-bold text-lg">
                                         {totalSp.toFixed(2)}
                                     </span>

@@ -63,7 +63,7 @@ export default function Order({ id }) {
                                         <th className="px-3 py-2 text-left">Date</th>
                                         <th className="px-3 py-2 text-left">Product Details</th>
                                         <th className="px-3 py-2 text-left">Group</th>
-                                        <th className="px-3 py-2 text-left">Sp</th>
+                                        <th className="px-3 py-2 text-left">RP</th>
                                         <th className="px-3 py-2 text-left">Amount</th>
                                         <th className="px-3 py-2 text-left">Status</th>
                                     </tr>

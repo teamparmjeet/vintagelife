@@ -136,7 +136,7 @@ export default function Page() {
                 <th className="py-4 px-6 text-sm text-left">Image</th>
                 <th className="py-4 px-6 text-sm text-left">Product Name</th>
                 <th className="py-4 px-6 text-sm text-left">Group</th>
-                <th className="py-4 px-6 text-sm text-left">Sp</th>
+                <th className="py-4 px-6 text-sm text-left">RP</th>
                 <th className="py-4 px-6 text-sm text-left">Mrp</th>
                 <th className="py-4 px-6 text-sm text-left">Discount Price</th>
               </tr>

@@ -4,7 +4,7 @@ import { useSidebar } from '@/app/context/SidebarContext'
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Grid2X2, UserCircle, NotepadText, UsersRound, Medal, FileUser, BookOpenText, NotebookText, KeyRound, MailPlus, Trophy, ScrollText, ChevronDown } from "lucide-react";
+import { Grid2X2, UserCircle, NotepadText, UsersRound, Medal, FileUser, BookOpenText,Mountain, NotebookText, KeyRound, MailPlus, Trophy, ScrollText, ChevronDown } from "lucide-react";
 const navItems = [
     {
         icon: <Grid2X2 />,
@@ -52,6 +52,11 @@ const navItems = [
         icon: <NotepadText />,
         name: "Withdrawal",
         path: "/admin/payment",
+    },
+     {
+        icon: <Mountain />,
+        name: "My Trip",
+        path: "/admin/mytrip",
     },
     {
         icon: <BookOpenText />,

@@ -102,7 +102,7 @@ export default function Dashboard() {
   const labelMap = panelData
     ? [
       {
-        title: "SAO SP",
+        title: "SAO RP",
         count: panelData.mainUser?.saosp || 0,
         color: "#3293ba",
         Icon: Target,

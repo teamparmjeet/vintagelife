@@ -7,6 +7,18 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
 export default function Signup() {
+
+    const indianStates = [
+        "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+        "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
+        "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
+        "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan",
+        "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh",
+        "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands",
+        "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu",
+        "Lakshadweep", "Delhi", "Puducherry", "Ladakh", "Jammu and Kashmir"
+    ];
+
     const [loginKey, setLoginKey] = useState(null); // holds dscode and password
     const [showModal, setShowModal] = useState(false);
     const [step, setStep] = useState(2);
@@ -107,9 +119,7 @@ export default function Signup() {
             if (!formData.address?.pinCode) newErrors.pinCode = "Please enter Pin Code";
             if (!formData.address?.state) newErrors.state = "Please select State";
 
-            if (!formData.aadharno) newErrors.aadharno = "Please enter aadharno";
-            if (!formData.aadharimage) newErrors.aadharimage = "Please Select aadharimage";
-            if (!formData.aadharfullname) newErrors.aadharfullname = "Please enter Aadhar Full Name";
+           
 
 
             // if (!formData.password.trim()) newErrors.password = "Password is required";
@@ -150,21 +160,21 @@ export default function Signup() {
     };
 
 
-    const handleImageUpload = async (file) => {
-        const formData = new FormData();
-        formData.append("file", file);
-        setIsSubmitting(true);
+    // const handleImageUpload = async (file) => {
+    //     const formData = new FormData();
+    //     formData.append("file", file);
+    //     setIsSubmitting(true);
 
-        try {
-            const response = await axios.post("/api/upload", formData);
-            setIsSubmitting(false); // ✅ move before return
-            return response.data.file.secure_url;
-        } catch (error) {
-            console.error("Image upload failed:", error);
-            setIsSubmitting(false); // ✅ move before return
-            return null;
-        }
-    };
+    //     try {
+    //         const response = await axios.post("/api/upload", formData);
+    //         setIsSubmitting(false); // ✅ move before return
+    //         return response.data.file.secure_url;
+    //     } catch (error) {
+    //         console.error("Image upload failed:", error);
+    //         setIsSubmitting(false); // ✅ move before return
+    //         return null;
+    //     }
+    // };
 
 
 
@@ -434,30 +444,50 @@ export default function Signup() {
                             </div>
 
                             {/*  */}
+
+
                             {[
                                 { label: 'Address Line 1', name: 'addressLine1' },
                                 { label: 'Address Line 2', name: 'addressLine2' },
                                 { label: 'City', name: 'city' },
                                 { label: 'Landmark', name: 'landmark' },
                                 { label: 'Pin Code', name: 'pinCode', type: 'number' },
-                                { label: 'State', name: 'state' },
+                                { label: 'State', name: 'state', type: 'select' },
                             ].map(({ label, name, type = 'text' }) => (
                                 <div key={name} className="lg:col-span-1">
                                     <label className="text-gray-700 text-sm font-semibold">{label}</label>
-                                    <input
-                                        type={type}
-                                        name={name}
-                                        placeholder={label}
-                                        value={formData.address[name]}
-                                        onChange={handleChange}
-                                        className="block w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm"
-                                        required
-                                    />
+
+                                    {name === 'state' ? (
+                                        <select
+                                            name={name}
+                                            value={formData.address[name]}
+                                            onChange={handleChange}
+                                            className="block w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm"
+                                            required
+                                        >
+                                            <option value="">Select State</option>
+                                            {indianStates.map((state) => (
+                                                <option key={state} value={state}>{state}</option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type={type}
+                                            name={name}
+                                            placeholder={label}
+                                            value={formData.address[name]}
+                                            onChange={handleChange}
+                                            className="block w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm"
+                                            required
+                                        />
+                                    )}
+
                                     {errors.address?.[name] && (
                                         <p className="text-red-500 text-xs">{errors.address[name]}</p>
                                     )}
                                 </div>
                             ))}
+
                             <div className="lg:col-span-1">
                                 <label className="text-gray-700 text-sm font-semibold">Gender</label>
                                 <select name="gender" value={formData.gender} onChange={handleChange} className="block w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md appearance-none placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm">
@@ -479,7 +509,7 @@ export default function Signup() {
                             </div>
 
 
-                            <div className="lg:col-span-1">
+                            {/* <div className="lg:col-span-1">
                                 <label className="text-gray-700 text-sm font-semibold">Aadhar No</label>
                                 <input type="number" name="aadharno" value={formData.aadharno} onChange={handleChange} placeholder="Aadhar No" className="block w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md appearance-none placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm" required />
                                 {errors.aadharno && <p className="text-red-500 text-xs">{errors.aadharno}</p>}
@@ -515,7 +545,7 @@ export default function Signup() {
                                     }}
                                 />
                                 {errors.aadharimage && <p className="text-red-500 text-xs">{errors.aadharimage}</p>}
-                            </div>
+                            </div> */}
 
 
 

@@ -244,7 +244,7 @@ export default function Page() {
                             <InputField label="Shipping Mobile" name="shippingmobile" type="tel" defaultValue={formData.shippingmobile} onChange={handleChange} required />
                             <InputField label="Shipping Pincode" name="shippinpPincode" defaultValue={formData.shippinpPincode} onChange={handleChange} required />
                             <InputField label="Net Amount" name="netamount" defaultValue={formData.netamount} disabled />
-                            <InputField label="Total SP" name="totalsp" defaultValue={formData.totalsp} disabled />
+                            <InputField label="Total RP" name="totalsp" defaultValue={formData.totalsp} disabled />
                             <InputField label="Shipping Charge" name="shippingcharge" defaultValue={formData.shippingcharge} disabled />
                             <SelectField label="Sale Group" name="salegroup" options={["SAO", "SGO"]} value={formData.salegroup} onChange={handleChange} required />
                         </tbody>
