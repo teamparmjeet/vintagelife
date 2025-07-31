@@ -214,6 +214,7 @@ const UserTable = React.memo(({ users }) => (
                 <th scope="col" className="px-6 py-4 hidden lg:table-cell">Active Sp</th>
                 <th scope="col" className="px-6 py-4 hidden lg:table-cell">Password</th>
                 <th scope="col" className="px-6 py-4">Status</th>
+                <th scope="col" className="px-6 py-4">Dashboard</th>
                 <th scope="col" className="px-6 py-4 text-right">Action</th>
             </tr>
         </thead>
@@ -250,7 +251,13 @@ const UserTable = React.memo(({ users }) => (
                                 : user.defaultdata}
                         </span>
                     </td>
-
+  
+                   <td className="px-6 py-4 text-right">
+                        <Link  href={`/superadmin/Report/allreport/${user.usertype === "1" ? "" : "deactiveuser/"}${user.dscode}?email=${encodeURIComponent(user.email)}`} className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                            <Eye size={14} />
+                            <span>View</span>
+                        </Link>
+                    </td>
                     <td className="px-6 py-4 text-right">
                         <Link href={`/superadmin/Userprofile/user/${user.email}`} className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
                             <Eye size={14} />
