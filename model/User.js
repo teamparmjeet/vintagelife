@@ -92,21 +92,29 @@ const UserSchema = new Schema(
 );
 
 
+// Add a constant for clarity
+const DS_PREFIX = "VL";
+
 UserSchema.pre("save", async function (next) {
   const doc = this;
   if (!doc.isNew) return next();
+
   try {
     const counter = await CounterModel.findByIdAndUpdate(
       { _id: "dscode" },
       { $inc: { sequence_value: 1 } },
       { new: true, upsert: true }
     );
-    doc.dscode = counter.sequence_value.toString().padStart(6, "0");
+
+    // 'VL' + 6-digit, zero-padded number
+    doc.dscode = `${DS_PREFIX}${String(counter.sequence_value).padStart(6, "0")}`;
+
     next();
   } catch (error) {
     next(error);
   }
 });
+
 
 
 
