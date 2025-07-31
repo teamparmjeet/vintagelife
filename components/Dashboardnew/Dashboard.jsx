@@ -199,6 +199,16 @@ export default function Dashboard() {
         Icon: Award,
         type: "currency",
       },
+      {
+        title: "Total Income",
+        count:
+          (Math.min(panelData.mainUser?.saosp ?? 0, panelData.mainUser?.sgosp ?? 0) * 10) +
+          (totalPerformance || 0),
+        color: "green",
+        Icon: Award,
+        type: "currency",
+      }
+
 
     ]
     : [];
@@ -224,7 +234,7 @@ export default function Dashboard() {
               type={item.type}
             />
           ))}
-        
+
 
 
         </div>
