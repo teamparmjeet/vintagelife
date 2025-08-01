@@ -1,224 +1,179 @@
 "use client";
-import React, { useState, useEffect } from "react";
+
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function normalizeDate(dateStr) {
-  if (!dateStr) return "";
-  if (dateStr.includes("-")) return dateStr;
-
-  const parts = dateStr.split("/");
-  if (parts.length === 3) {
-    const [day, month, year] = parts;
-    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-  }
-
-  return dateStr;
-}
-
 export default function Page() {
-  const { data: session } = useSession();
-  const [rawData, setRawData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { data: session, status } = useSession();
+
+  const [data, setData] = useState([]);
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [saorp, setSaorp] = useState(0);
+  const [sgorp, setSgorp] = useState(0);
+  const [totalBonus, setTotalBonus] = useState(0);
+  const [totalPerformance, setTotalPerformance] = useState(0);
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
-  const [levels, setLevels] = useState([]);
-  useEffect(() => {
-    const fetchLevels = async () => {
-      try {
-        const res = await axios.get("/api/level/fetch/level");
-        setLevels(res.data.data);
-      } catch (err) {
-        console.error("Failed to load levels", err);
-      }
-    };
 
-    fetchLevels();
-  }, []);
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (!session?.user?.email) return;
-      setLoading(true);
-      try {
-        const response = await axios.get(`/api/user/find-admin-byemail/${session.user.email}`);
-        if (response.data?.WalletDetails) {
-          setRawData(response.data.WalletDetails);
-        }
-      } catch (error) {
-        console.error("Failed to fetch user data:", error);
-        toast.error("Failed to load data");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    const dscode = session?.user?.dscode;
+    if (!dscode) return;
 
-    fetchUserData();
-  }, [session?.user?.email]);
-  useEffect(() => {
-    const grouped = {};
+    try {
+      const params = new URLSearchParams();
+      if (fromDate) params.append("from", fromDate.toISOString());
+      if (toDate) params.append("to", toDate.toISOString());
 
-    rawData.forEach(item => {
-      const normDate = normalizeDate(item.date);
-      const amount = parseFloat(item.salesgrowth || 0);
+      const res = await axios.get(`/api/PaymentHistory/user/${dscode}?${params}`);
+      const records = res.data.data;
 
-      const matchingLevel = levels.find(level => parseFloat(level.bonus_income) === amount);
+      setData(records);
 
-      if (!grouped[normDate]) {
-        grouped[normDate] = { total: 0, levels: new Set() };
-      }
+      let total = 0;
+      let sao = 0;
+      let sgo = 0;
+      let bonusSum = 0;
+      let perfSum = 0;
 
-      grouped[normDate].total += amount;
-      if (matchingLevel) grouped[normDate].levels.add(matchingLevel.level_name);
-    });
+      records.forEach((item) => {
+        const bonus = parseFloat(item.bonus_income || 0);
+        const perf = parseFloat(item.performance_income || 0);
+        const sp = parseFloat(item.sp || 0);
 
-    let result = Object.entries(grouped).map(([date, { total, levels }], index) => ({
-      id: index + 1,
-      from: date,
-      to: date,
-      amount: total,
-      levelNames: Array.from(levels),
-    }));
+        total += bonus + perf + sp;
+        bonusSum += bonus;
+        perfSum += perf;
 
-    if (fromDate || toDate) {
-      result = result.filter(entry => {
-        const entryDate = new Date(entry.from);
-        const from = fromDate ? new Date(fromDate) : null;
-        const to = toDate ? new Date(toDate) : null;
-
-        if (from) from.setHours(0, 0, 0, 0);
-        if (to) to.setHours(23, 59, 59, 999);
-
-        return (!from || entryDate >= from) && (!to || entryDate <= to);
+        if (item.group === "SAO") sao += sp;
+        if (item.group === "SGO") sgo += sp;
       });
+
+      setTotalIncome(total);
+      setSaorp(sao);
+      setSgorp(sgo);
+      setTotalBonus(bonusSum);
+      setTotalPerformance(perfSum);
+    } catch (err) {
+      console.error("Error fetching payment data:", err);
     }
-
-    result.sort((a, b) => (a.from < b.from ? 1 : -1));
-    setFilteredData(result);
-  }, [rawData, fromDate, toDate, levels]);
-
-
-
-  const exportToExcel = () => {
-    const csvRows = [
-      ["S.No", "From", "To", "Amount (₹)"],
-      ...filteredData.map((item) => [
-        item.id,
-        item.from,
-        item.to,
-        item.amount.toFixed(2),
-      ]),
-    ];
-
-    const csvString = csvRows.map(row => row.join(",")).join("\n");
-    const blob = new Blob([csvString], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "salesgrowth.csv";
-    link.click();
-    URL.revokeObjectURL(url);
   };
 
-  return (
-    <div className="p-4 md:p-6 text-sm">
-      <Toaster />
-      <h1 className="text-xl md:text-2xl text-blue-400  border-b pb-2 mb-4 capitalize ">
-        Salesgrowth Income
-      </h1>
+  useEffect(() => {
+    if (status === "authenticated") {
+      fetchData();
+    }
+  }, [status, session]);
 
-      <div className="flex flex-wrap gap-4 items-end mb-6">
+  if (status === "loading") return <div>Loading...</div>;
+
+  return (
+    <div className="p-6 overflow-x-auto">
+      {/* Date Filters */}
+      <div className="mb-4 flex gap-4 items-end">
         <div>
-          <label className="block mb-1 font-medium text-gray-700">From Date</label>
+          <label className="block text-sm font-medium text-gray-700">From Date</label>
           <DatePicker
             selected={fromDate}
             onChange={(date) => setFromDate(date)}
             dateFormat="yyyy-MM-dd"
-            className="border border-gray-500 px-2 py-1 w-40 text-gray-800"
-            placeholderText="Select date"
+            className="border px-3 py-1 rounded w-full"
+            placeholderText="Select start date"
             maxDate={new Date()}
           />
         </div>
-
         <div>
-          <label className="block mb-1 font-medium text-gray-700">To Date</label>
+          <label className="block text-sm font-medium text-gray-700">To Date</label>
           <DatePicker
             selected={toDate}
             onChange={(date) => setToDate(date)}
             dateFormat="yyyy-MM-dd"
-            className="border border-gray-500 px-2 py-1 w-40 text-gray-800"
-            placeholderText="Select date"
+            className="border px-3 py-1 rounded w-full"
+            placeholderText="Select end date"
             maxDate={new Date()}
           />
         </div>
-
-        {(fromDate || toDate) && (
-          <button
-            onClick={() => {
-              setFromDate(null);
-              setToDate(null);
-            }}
-            className="text-red-600 underline text-sm"
-          >
-            Clear Filters
-          </button>
-        )}
-
         <button
-          onClick={exportToExcel}
-          className="ml-auto bg-green-600 hover:bg-green-700 text-white px-4 py-1 border border-green-800"
+          onClick={fetchData}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          Export to Excel
+          Apply Filter
         </button>
       </div>
 
-      {loading ? (
-        <p className="text-gray-600">Loading...</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full border border-gray-400 text-left text-gray-800">
-            <thead className="bg-gray-100 border-b border-gray-400">
-              <tr>
-                <th className="px-4 py-2 border-r">S. No.</th>
-                <th className="px-4 py-2 border-r">From</th>
-                <th className="px-4 py-2 border-r">To</th>
-                <th className="px-4 py-2 border-r">Bonus</th>
-                <th className="px-4 py-2">Level</th>
-              </tr>
-            </thead>
+      {/* Summary Table */}
+      <div className="mb-4">
+        <table className="min-w-full text-sm text-left border border-gray-300 bg-white shadow rounded-lg overflow-hidden">
+          <thead className="bg-gray-100 text-gray-700">
+            <tr>
+              <th className="px-4 py-2 border">Pair Matching Income</th>
+              <th className="px-4 py-2 border">Total Bonus Income</th>
+              <th className="px-4 py-2 border">Total Performance Income</th>
+              <th className="px-4 py-2 border">Total </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="text-gray-800">
+              <td className="px-4 py-2 border text-green-700">₹{Math.min(saorp, sgorp) * 10}</td>
+              <td className="px-4 py-2 border text-blue-700">₹{totalBonus}</td>
+              <td className="px-4 py-2 border text-purple-700">₹{totalPerformance}</td>
+              <td className="px-4 py-2 border font-semibold text-black">
+        ₹
+        {Math.min(saorp, sgorp) * 10 + totalBonus + totalPerformance}
+      </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-            <tbody>
-              {filteredData.length === 0 ? (
-                <tr>
-                  <td colSpan="5" className="text-center py-4 text-gray-500">
-                    No data found
-                  </td>
-                </tr>
-              ) : (
-                filteredData.map((item, index) => (
-                  <tr key={item.id} className="border-t border-gray-300 hover:bg-gray-50">
-                    <td className="px-4 py-2 border-r">{index + 1}</td>
-                    <td className="px-4 py-2 border-r">{item.from}</td>
-                    <td className="px-4 py-2 border-r">{item.to}</td>
+      {/* Main Data Table */}
+      <table className="min-w-full text-sm text-left border border-gray-200">
+        <thead className="bg-gray-100 text-gray-700">
+          <tr>
+            <th className="px-4 py-2 border">#</th>
+            {/* <th className="px-4 py-2 border">Group</th> */}
+            <th className="px-4 py-2 border">Rp</th>
+            <th className="px-4 py-2 border">Type</th>
+            <th className="px-4 py-2 border">Reference Name</th>
+            <th className="px-4 py-2 border">Bonus Income</th>
+            <th className="px-4 py-2 border">Performance Income</th>
+            <th className="px-4 py-2 border">SP</th>
+            <th className="px-4 py-2 border">Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={item._id} className="border-t hover:bg-gray-50">
+              <td className="px-4 py-2 border">{index + 1}</td>
+              {/* <td className="px-4 py-2 border">{item.group}</td> */}
+              <td className="px-4 py-2 border">{item.sp}</td>
+              <td className="px-4 py-2 border">{item.type}</td>
+              <td className="px-4 py-2 border">{item.referencename || "-"}</td>
+              <td className="px-4 py-2 border">₹{item.bonus_income || 0}</td>
+              <td className="px-4 py-2 border">₹{item.performance_income || 0}</td>
+              <td className="px-4 py-2 border">{item.sp || 0}</td>
+              <td className="px-4 py-2 border">
+                {new Date(item.createdAt).toLocaleDateString()}
+              </td>
+            </tr>
+          ))}
+          <tr className="font-semibold bg-gray-50">
+            <td colSpan={4} className="px-4 py-2 border text-right">Totals:</td>
+            <td className="px-4 py-2 border text-green-700">₹{totalBonus}</td>
+            <td className="px-4 py-2 border text-blue-700">₹{totalPerformance}</td>
+            <td className="px-4 py-2 border text-purple-700"></td>
+            <td className="px-4 py-2 border"></td>
+            <td className="px-4 py-2 border"></td>
+          </tr>
+        </tbody>
+      </table>
 
-                    <td className="px-4 py-2 text-green-700 font-semibold">
-                      ₹{item.amount.toLocaleString()}
-                    </td> 
-                    <td className="px-4 py-2 border-r text-blue-700">
-                      {item.levelNames.join(", ") || "—"}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-
-          </table>
-        </div>
-      )}
+      {/* <div className="mt-4 space-y-2 text-sm text-gray-700">
+        <div><span className="font-medium">SAO RP:</span> ₹{saorp}</div>
+        <div><span className="font-medium">SGO RP:</span> ₹{sgorp}</div>
+      </div> */}
     </div>
   );
 }

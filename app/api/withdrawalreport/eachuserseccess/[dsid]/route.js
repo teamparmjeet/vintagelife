@@ -1,7 +1,7 @@
 import dbConnect from "@/lib/dbConnect";
 import ClosingHistoryModel from "@/model/ClosingHistory";
 import MonthlyClosingHistoryModel from "@/model/MonthleClosingHistory";
-
+import TravelfundModel from "@/model/travelfund";
 export const GET = async (request, { params }) => {
   await dbConnect();
 
@@ -18,19 +18,21 @@ export const GET = async (request, { params }) => {
   try {
     // Fetch both datasets
     const closingHistory = await ClosingHistoryModel.find(filter)
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(limit);
+      .sort({ createdAt: -1 });
 
     const monthlyHistory = await MonthlyClosingHistoryModel.find(filter)
       .sort({ createdAt: -1 });
 
+      const travelHistory = await TravelfundModel.find(filter)
+      .sort({ createdAt: -1 });
+
     // Merge both arrays
-    const combinedData = [...closingHistory, ...monthlyHistory];
+    const combinedData = [...closingHistory, ...monthlyHistory, ...travelHistory];
 
     const total = await ClosingHistoryModel.countDocuments(filter);
     const totalMonthly = await MonthlyClosingHistoryModel.countDocuments(filter);
-    const totalCombined = total + totalMonthly;
+    const totaltravel = await TravelfundModel.countDocuments(filter);
+    const totalCombined = total + totalMonthly + totaltravel;
 
     return Response.json({
       message: "Data fetched successfully!",

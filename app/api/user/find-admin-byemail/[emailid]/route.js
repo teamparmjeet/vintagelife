@@ -34,9 +34,9 @@ export async function GET(request, { params }) {
           for (const level of allLevels) {
             const levelSao = parseInt(level.sao);
             if (!isNaN(levelSao) && levelSao <= userSao) {
-              if (user.activesp == "100") {
+             
                 totalBonusIncome += parseFloat(level.bonus_income || 0);
-              }
+              
               totalPerformanceIncome += parseFloat(level.performance_income || 0);
             }
           }
@@ -47,7 +47,7 @@ export async function GET(request, { params }) {
     return Response.json(
       {
         ...user._doc,
-        totalBonusIncome: user.activesp == "100" ? totalBonusIncome : 0,
+        totalBonusIncome,
         totalPerformanceIncome,
         success: true,
       },
