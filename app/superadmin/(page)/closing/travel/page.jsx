@@ -13,7 +13,7 @@ export default function Page() {
 
   const fetchData = async (page = 1) => {
     try {
-      const res = await fetch(`/api/closing/getpairclosing?page=${page}&limit=10`)
+      const res = await fetch(`/api/closing/gettravelfund?page=${page}&limit=10`)
       const result = await res.json()
       if (result.success) {
         setData(result.data)
@@ -29,27 +29,27 @@ export default function Page() {
     fetchData(currentPage)
   }, [currentPage])
 
-  // const handleConfirm = async () => {
-  //   setLoading(true)
-  //   try {
-  //     const res = await fetch('/api/newclosing/pair', { method: 'POST' })
-  //     const result = await res.json()
-  //     alert(result.message)
-  //     fetchData(currentPage)
-  //   } catch (error) {
-  //     console.error('API call failed', error)
-  //     alert('API call failed!')
-  //   } finally {
-  //     setLoading(false)
-  //     setShowModal(false)
-  //   }
-  // }
+  const handleConfirm = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/newclosing/travel', { method: 'POST' })
+      const result = await res.json()
+      alert(result.message)
+      fetchData(currentPage)
+    } catch (error) {
+      console.error('API call failed', error)
+      alert('API call failed!')
+    } finally {
+      setLoading(false)
+      setShowModal(false)
+    }
+  }
 
-  // const toggleSelect = (id) => {
-  //   setSelectedIds((prev) =>
-  //     prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-  //   )
-  // }
+  const toggleSelect = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    )
+  }
 
 
   const handleExport = () => {
@@ -77,7 +77,7 @@ export default function Page() {
     if (!utr || utr.trim() === '') return alert('UTR is required for success');
 
     try {
-      const res = await fetch('/api/closing/updatepair', {
+      const res = await fetch('/api/closing/updatetravel', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -104,7 +104,7 @@ export default function Page() {
     if (!reason || reason.trim() === '') return alert('Invalid reason is required');
 
     try {
-      const res = await fetch('/api/closing/updatepair', {
+      const res = await fetch('/api/closing/updatetravel', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -128,15 +128,15 @@ export default function Page() {
   return (
     <div className="p-4 space-y-6">
       <div className="flex flex-wrap justify-between gap-4">
-        {/* <div>
+        <div>
 
           <button
             onClick={() => setShowModal(true)}
             className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
-            Pair Closing
+            Travel Fund Closing
           </button>
-        </div> */}
+        </div>
         <div className=' flex flex-wrap gap-2'>
 
           <button
@@ -164,9 +164,8 @@ export default function Page() {
                 <th className="p-3 border">Amount</th>
                  <th className="p-3 border">Admin Charge (5%)</th>
                 <th className="p-3 border">Pay Amount</th>
-                <th className="p-3 border">Travel Fund</th>
                 <th className="p-3 border">Date</th>
-                {/* <th className="p-3 border">Approve/Invalid</th> */}
+                <th className="p-3 border">Approve/Invalid</th>
                 {/* <th className="p-3 border">Status</th> */}
               </tr>
             </thead>
@@ -180,14 +179,12 @@ export default function Page() {
                   <td className="p-3 border">{item.ifscCode || '-'}</td>
                   <td className="p-3 border">{item.bankName || '-'}</td>
                   <td className="p-3 border">{item.amount}</td>
-                  <td className="p-3 border">₹{item.charges}</td> 
+                  <td className="p-3 border">₹{item.charges}</td>
 
                   <td className="p-3 border">{item.payamount}</td>
-                  <td className="p-3 border">{(item.payamount * 0.15).toFixed(2)}</td>
-
                   <td className="p-3 border">{item.date}</td>
-                  {/* <td className="p-3 border space-y-1">
-                  
+                  <td className="p-3 border space-y-1">
+                    {/* Input for Success */}
                     <div className=' flex gap-2'>
 
                       <input
@@ -221,6 +218,7 @@ export default function Page() {
                         Success
                       </button>
 
+                      {/* Input for Invalid */}
 
                       <button
                         onClick={() => handleInvalid(item._id, item.invalidInput)}
@@ -229,7 +227,7 @@ export default function Page() {
                         Invalid
                       </button>
                     </div>
-                  </td> */}
+                  </td>
 
                   {/* 
                   <td className="p-3 border text-center">

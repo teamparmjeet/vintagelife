@@ -95,8 +95,8 @@ const navItems = [
         subItems: [
             { name: "Pair Income Closing", path: "/superadmin/closing/pair", pro: false },
             { name: "Monthly Closing", path: "/superadmin/closing/monthly", pro: false },
-            { name: "Bonanza Closing", path: "/superadmin/closing/bonanza", pro: false },
             { name: "Travel Fund Closing", path: "/superadmin/closing/travel", pro: false },
+            { name: "Bonanza Closing", path: "/superadmin/closing/bonanza", pro: false },
         ],
     },
 
@@ -117,6 +117,16 @@ const navItems = [
             { name: "Pending", path: "/superadmin/withdrawal/month/pending", pro: false },
             { name: "Success", path: "/superadmin/withdrawal/month/success", pro: false },
             { name: "Invalid", path: "/superadmin/withdrawal/month/invalid", pro: false },
+        ],
+    },
+
+     {
+        icon: <Folder />,
+        name: "Travel Fund Withdrawal",
+        subItems: [
+            { name: "Pending", path: "/superadmin/withdrawal/travel/pending", pro: false },
+            { name: "Success", path: "/superadmin/withdrawal/travel/success", pro: false },
+            { name: "Invalid", path: "/superadmin/withdrawal/travel/invalid", pro: false },
         ],
     },
 

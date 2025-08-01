@@ -74,6 +74,7 @@ const UserSchema = new Schema(
     ],
     wallet: { type: String, default: "0" },
     lastMatchedSP: { type: String, default: "0" },
+    travellastMatchedSP: { type: String, default: "0" },
     branchName: { type: String },
     nomineebankName: { type: String },
     nomineeacnumber: { type: String },
@@ -119,6 +120,6 @@ UserSchema.pre("save", async function (next) {
 
 
 
-const UserModel = mongoose.models.user5 || mongoose.model("user5", UserSchema);
+const UserModel = mongoose.models.user6 || mongoose.model("user6", UserSchema);
 
 export default UserModel;
