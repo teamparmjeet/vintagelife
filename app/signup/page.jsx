@@ -20,6 +20,8 @@ export default function Signup() {
     ];
     const [nameTitle, setNameTitle] = useState("");
     const [fatherOrHusbandTitle, setFatherOrHusbandTitle] = useState("");
+    const [referenceName, setReferenceName] = useState("");
+    const [verifying, setVerifying] = useState(false);
 
     const [loginKey, setLoginKey] = useState(null); // holds dscode and password
     const [showModal, setShowModal] = useState(false);
@@ -95,6 +97,27 @@ export default function Signup() {
     };
 
 
+    const handleVerifyUser = async () => {
+        setVerifying(true);
+        setReferenceName("");
+        setErrors((prev) => ({ ...prev, pdscode: "" }));
+
+        try {
+            const res = await axios.get(`/api/user/checkrefer/${formData.pdscode}`);
+            if (res.data.success) {
+                setReferenceName(res.data.name);
+                toast.success("User verified successfully!");
+            } else {
+                setErrors((prev) => ({ ...prev, pdscode: "User not found!" }));
+                toast.error("User not found!");
+            }
+        } catch (err) {
+            setErrors((prev) => ({ ...prev, pdscode: "Verification failed!" }));
+            toast.error("Verification failed!");
+        } finally {
+            setVerifying(false);
+        }
+    };
 
 
     const validateFields = () => {
@@ -656,9 +679,38 @@ export default function Signup() {
 
                             <div className="lg:col-span-1">
                                 <label className="text-gray-700 text-sm font-semibold">Reference Ds Id.</label>
-                                <input type="text" name="pdscode" value={formData.pdscode} onChange={handleChange} className="block uppercase w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md appearance-none placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm" required />
-                                {errors.pdscode && <p className="text-red-500 text-xs">{errors.pdscode}</p>}
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        name="pdscode"
+                                        value={formData.pdscode}
+                                        onChange={handleChange}
+                                        placeholder="Enter DS Code"
+                                        className="block uppercase w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={handleVerifyUser}
+                                        className="px-3 py-2 bg-[#161950] text-white rounded-md text-sm"
+                                    >
+                                        {verifying ? "Checking..." : "Verify"}
+                                    </button>
+                                </div>
+                                {errors.pdscode && <p className="text-red-500 text-xs mt-1">{errors.pdscode}</p>}
                             </div>
+
+                            <div className="lg:col-span-1">
+                                <label className="text-gray-700 text-sm font-semibold">Reference Name</label>
+                                <input
+                                    readOnly
+                                    type="text"
+                                    value={referenceName}
+                                    className="block uppercase w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm"
+                                />
+                            </div>
+
+
                             {/* <div className="lg:col-span-1">
                                 <label className="text-gray-700 text-sm font-semibold">Password</label>
                                 <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Password" className="block w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md appearance-none placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm" required />
