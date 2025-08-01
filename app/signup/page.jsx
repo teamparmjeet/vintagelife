@@ -18,6 +18,8 @@ export default function Signup() {
         "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu",
         "Lakshadweep", "Delhi", "Puducherry", "Ladakh", "Jammu and Kashmir"
     ];
+    const [nameTitle, setNameTitle] = useState("");
+    const [fatherOrHusbandTitle, setFatherOrHusbandTitle] = useState("");
 
     const [loginKey, setLoginKey] = useState(null); // holds dscode and password
     const [showModal, setShowModal] = useState(false);
@@ -58,39 +60,39 @@ export default function Signup() {
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const handleChange = (e) => {
+        const { name, value } = e.target;
 
-    const addressFields = ['addressLine1', 'addressLine2', 'city', 'landmark', 'pinCode', 'state'];
+        const addressFields = ['addressLine1', 'addressLine2', 'city', 'landmark', 'pinCode', 'state'];
 
-    const updatedValue = name === 'pdscode' ? value.toUpperCase() : value;
+        const updatedValue = name === 'pdscode' ? value.toUpperCase() : value;
 
-    if (addressFields.includes(name)) {
-        setFormData((prev) => ({
-            ...prev,
-            address: {
-                ...prev.address,
+        if (addressFields.includes(name)) {
+            setFormData((prev) => ({
+                ...prev,
+                address: {
+                    ...prev.address,
+                    [name]: updatedValue,
+                },
+            }));
+            setErrors((prev) => ({
+                ...prev,
+                address: {
+                    ...prev.address,
+                    [name]: '',
+                },
+            }));
+        } else {
+            setFormData((prev) => ({
+                ...prev,
                 [name]: updatedValue,
-            },
-        }));
-        setErrors((prev) => ({
-            ...prev,
-            address: {
-                ...prev.address,
+            }));
+            setErrors((prev) => ({
+                ...prev,
                 [name]: '',
-            },
-        }));
-    } else {
-        setFormData((prev) => ({
-            ...prev,
-            [name]: updatedValue,
-        }));
-        setErrors((prev) => ({
-            ...prev,
-            [name]: '',
-        }));
-    }
-};
+            }));
+        }
+    };
 
 
 
@@ -122,7 +124,7 @@ export default function Signup() {
             if (!formData.address?.pinCode) newErrors.pinCode = "Please enter Pin Code";
             if (!formData.address?.state) newErrors.state = "Please select State";
 
-           
+
 
 
             // if (!formData.password.trim()) newErrors.password = "Password is required";
@@ -361,9 +363,59 @@ export default function Signup() {
                         <>
                             <div className="lg:col-span-1">
                                 <label className="text-gray-700 text-sm font-semibold">Full Name</label>
-                                <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" className="block w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md appearance-none placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm" required />
+                                <div className="flex gap-2">
+                                    <select
+                                        value={nameTitle}
+                                        onChange={(e) => {
+                                            const selected = e.target.value;
+                                            setNameTitle(selected);
+
+                                            setFormData((prev) => {
+                                                const nameOnly = prev.name.replace(/^(Mr|Mrs|Miss)\s*/i, '').trim();
+                                                return {
+                                                    ...prev,
+                                                    name: nameOnly ? `${selected} ${nameOnly}` : '',
+                                                };
+                                            });
+                                        }}
+                                        className="px-1 py-3 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-[#161950]"
+                                    >
+                                        <option value="">Title</option>
+                                        <option value="Mr">Mr</option>
+                                        <option value="Mrs">Mrs</option>
+                                        <option value="Miss">Miss</option>
+                                    </select>
+
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={(e) => {
+                                            const raw = e.target.value.replace(/^(Mr|Mrs|Miss)\s*/i, '').trim();
+
+                                            // If name is cleared, also remove the title
+                                            if (!raw) {
+                                                setNameTitle('');
+                                                handleChange({ target: { name: "name", value: "" } });
+                                            } else {
+                                                handleChange({
+                                                    target: {
+                                                        name: "name",
+                                                        value: nameTitle ? `${nameTitle} ${raw}` : raw,
+                                                    },
+                                                });
+                                            }
+                                        }}
+                                        placeholder="Full Name"
+                                        className="block w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm"
+                                        required
+                                    />
+
+                                </div>
                                 {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
                             </div>
+
+
                             <div className="lg:col-span-1">
                                 <label className="text-gray-700 text-sm font-semibold">Mobile No</label>
                                 <PhoneInput country="in" disableDropdown={true} value={formData.mobileNo} onChange={(phone) => setFormData({ ...formData, mobileNo: phone })} inputStyle={{ width: "100%", height: "45px", borderColor: "lightgray" }} />
@@ -387,10 +439,60 @@ export default function Signup() {
                             </div>
 
                             <div className="lg:col-span-1">
-                                <label className="text-gray-700 text-sm font-semibold">Father Or HusbandName</label>
-                                <input type="text" placeholder="Father Or HusbandName" name="fatherOrHusbandName" value={formData.fatherOrHusbandName} onChange={handleChange} className="block w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md appearance-none placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm" required />
+                                <label className="text-gray-700 text-sm font-semibold">Father or Husband Name</label>
+                                <div className="flex gap-2">
+                                    <select
+                                        value={fatherOrHusbandTitle}
+                                        onChange={(e) => {
+                                            const selected = e.target.value;
+                                            setFatherOrHusbandTitle(selected);
+
+                                            setFormData((prev) => {
+                                                const base = prev.fatherOrHusbandName.replace(/^(Mr|Mrs|Miss)\s*/i, '').trim();
+                                                return {
+                                                    ...prev,
+                                                    fatherOrHusbandName: base ? `${selected} ${base}` : '',
+                                                };
+                                            });
+                                        }}
+                                        className="px-1 py-3 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-[#161950]"
+                                    >
+                                        <option value="">Title</option>
+                                        <option value="Mr">Mr</option>
+                                        <option value="Mrs">Mrs</option>
+                                        <option value="Miss">Miss</option>
+                                    </select>
+
+                                    <input
+                                        type="text"
+                                        name="fatherOrHusbandName"
+                                        value={formData.fatherOrHusbandName}
+                                        onChange={(e) => {
+                                            const raw = e.target.value.replace(/^(Mr|Mrs|Miss)\s*/i, '').trim();
+
+                                            // If cleared, also remove the title
+                                            if (!raw) {
+                                                setFatherOrHusbandTitle('');
+                                                handleChange({ target: { name: "fatherOrHusbandName", value: "" } });
+                                            } else {
+                                                handleChange({
+                                                    target: {
+                                                        name: "fatherOrHusbandName",
+                                                        value: fatherOrHusbandTitle ? `${fatherOrHusbandTitle} ${raw}` : raw,
+                                                    },
+                                                });
+                                            }
+                                        }}
+                                        placeholder="Father or Husband Name"
+                                        className="block w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm"
+                                        required
+                                    />
+
+                                </div>
                                 {errors.fatherOrHusbandName && <p className="text-red-500 text-xs">{errors.fatherOrHusbandName}</p>}
                             </div>
+
+
 
                             <div className="lg:col-span-1">
                                 <label className="text-gray-700 text-sm font-semibold">profession</label>
