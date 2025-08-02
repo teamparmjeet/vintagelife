@@ -57,19 +57,21 @@ export async function GET(req) {
           dsid,
           mobile: user.mobileNo,
           level: bonanzaLevel, // always from bonanza
-          saosp: userSaosp,
-          sgosp: userSgosp,
-          previousSaosp: prevSaosp,
-          previousSgosp: prevSgosp,
-          requiredAddSao: requiredSao,
-          requiredAddSgo: requiredSgo,
-          totalTargetSaosp: targetSaosp,
-          totalTargetSgosp: targetSgosp,
         });
       }
     }
 
-    return Response.json({ success: true, users: qualifiedUsers }, { status: 200 });
+    // Return users + bonanza details
+    return Response.json(
+      {
+        success: true,
+        title: bonanzaData.title,
+        datefrom: bonanzaData.datefrom,
+        dateto: bonanzaData.dateto,
+        users: qualifiedUsers,
+      },
+      { status: 200 }
+    );
 
   } catch (error) {
     console.error("API Error:", error);
