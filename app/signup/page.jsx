@@ -416,7 +416,7 @@ export default function Signup() {
                                         name="name"
                                         value={formData.name}
                                         onChange={(e) => {
-                                            const raw = e.target.value.replace(/^(Mrs|Miss|Mr)\s*/i, '').trim();
+                                            const raw = e.target.value.replace(/^(Mrs|Miss|Mr)\s*/i, '').trimStart();
 
                                             // If name is cleared, also remove the title
                                             if (!raw) {
@@ -493,7 +493,7 @@ export default function Signup() {
                                         name="fatherOrHusbandName"
                                         value={formData.fatherOrHusbandName}
                                         onChange={(e) => {
-                                            const raw = e.target.value.replace(/^(S\/O|D\/O|W\/O)\s*/i, '').trim();
+                                            const raw = e.target.value.replace(/^(S\/O|D\/O|W\/O)\s*/i, '').trimStart();
 
                                             if (!raw) {
                                                 setFatherOrHusbandTitle('');
