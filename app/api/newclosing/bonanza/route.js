@@ -8,24 +8,13 @@ export async function GET(req) {
   try {
     await dbConnect();
 
-    const allUsers = await UserModel.find({});
+    // Get latest bonanza data
     const bonanzaData = await MonthsModel.findOne().sort({ createdAt: -1 });
-
     if (!bonanzaData) {
       return Response.json({ success: false, message: "No bonanza data found" }, { status: 404 });
     }
 
-    // Create map of UserDetails
-    const userDetailsMap = {};
-    for (const detail of bonanzaData.UserDetails) {
-      userDetailsMap[detail.dsid] = {
-        saosp: parseFloat(detail.saosp || "0"),
-        sgosp: parseFloat(detail.sgosp || "0"),
-        level: detail.userlevel || "",
-      };
-    }
-
-    // Create map of level thresholds
+    // Create levels requirement map
     const levelsMap = {};
     for (const levelEntry of bonanzaData.levels) {
       levelsMap[levelEntry.level] = {
@@ -36,34 +25,38 @@ export async function GET(req) {
 
     const qualifiedUsers = [];
 
-    for (const user of allUsers) {
-      const dsid = user.dscode;
-      if (!dsid || !userDetailsMap[dsid]) continue;
+    // Loop over each bonanza user detail
+    for (const detail of bonanzaData.UserDetails) {
+      const dsid = detail.dsid;
+      const prevSaosp = parseFloat(detail.saosp || "0");
+      const prevSgosp = parseFloat(detail.sgosp || "0");
+      const bonanzaLevel = detail.userlevel || "";
 
-      const userSaosp = parseFloat(user.saosp || "0");
-      const userSgosp = parseFloat(user.sgosp || "0");
-
-      const detail = userDetailsMap[dsid];
-      const prevSaosp = detail.saosp;
-      const prevSgosp = detail.sgosp;
-      const userLevel = detail.level;
-
-      const levelRequirement = levelsMap[userLevel];
+      // Get level requirement from bonanza levels map
+      const levelRequirement = levelsMap[bonanzaLevel];
       if (!levelRequirement) continue;
 
       const requiredSao = levelRequirement.sao;
       const requiredSgo = levelRequirement.sgo;
 
-      // Final threshold = user's previous + required increase
+      // Get current user sales from UserModel
+      const user = await UserModel.findOne({ dscode: dsid });
+      if (!user) continue;
+
+      const userSaosp = parseFloat(user.saosp || "0");
+      const userSgosp = parseFloat(user.sgosp || "0");
+
+      // Calculate final targets
       const targetSaosp = prevSaosp + requiredSao;
       const targetSgosp = prevSgosp + requiredSgo;
 
+      // Check qualification
       if (userSaosp >= targetSaosp && userSgosp >= targetSgosp) {
         qualifiedUsers.push({
           username: user.name,
           dsid,
           mobile: user.mobileNo,
-          level: userLevel,
+          level: bonanzaLevel, // always from bonanza
           saosp: userSaosp,
           sgosp: userSgosp,
           previousSaosp: prevSaosp,
@@ -71,7 +64,7 @@ export async function GET(req) {
           requiredAddSao: requiredSao,
           requiredAddSgo: requiredSgo,
           totalTargetSaosp: targetSaosp,
-          totalTargetSgosp: targetSgosp
+          totalTargetSgosp: targetSgosp,
         });
       }
     }

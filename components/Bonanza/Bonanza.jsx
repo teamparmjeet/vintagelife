@@ -10,6 +10,7 @@ export default function Bonanza() {
     const [userdata, setUserdata] = useState(null);
     const [userds, setUserds] = useState("");
     const { data: session } = useSession();
+
     function formatDate(dateStr) {
         const date = new Date(dateStr);
         if (isNaN(date.getTime())) return "Invalid date";
@@ -69,51 +70,65 @@ export default function Bonanza() {
     }
 
     return (
-        <div className="flex flex-wrap justify-center gap-8 mt-8 px-4">
-            <div className="w-full text-center bordernormal rounded overflow-hidden">
-                <Link href="./bonanza" className='relative'>
-                    <h1 className="text-3xl font-bold font-serif textn underline  ">
+        <div className="flex flex-col items-center gap-8 mt-8 px-4">
+            {/* Bonanza Title Card */}
+            <div className="relative w-full  bg-gradient-to-r from-[#FEECE2] to-[#F7DED0] rounded-xl shadow p-6 text-center">
+                <Link href="./bonanza">
+                    <h1 className="text-3xl font-bold font-serif text-[#5A3E36] underline decoration-[#E2BFB3] underline-offset-4">
                         Bonanza: {data.title}
                     </h1>
-                    <p className="text-sm sm:text-base mt-2 textn">
+                    <p className="text-sm sm:text-base mt-3 text-[#6B4C3B]">
                         {formatDate(data.datefrom)} &mdash; {formatDate(data.dateto)}
                     </p>
-                    <span className=' absolute bgn text-white px-2  top-0 right-0'>Click here</span>
+                    <span className="absolute top-3 right-3 bg-[#E2BFB3] text-white text-xs px-3 py-1 rounded-full shadow-md">
+                        Click here
+                    </span>
                 </Link>
             </div>
-            {['SAO', 'SGO'].map(type => {
-                const userSP = parseInt(userdata?.[`${type.toLowerCase()}sp`] || "0");
-                const baseSP = parseInt(data?.UserDetails?.[0]?.[`${type.toLowerCase()}sp`] || "0");
-                const current = userSP - baseSP;
 
-                const userLevel = userdata?.level || "";
-                const levelTarget = data.levels?.find(lvl => lvl.level === userLevel);
-                const target = levelTarget ? parseInt(levelTarget[type.toLowerCase()] || "0") : 0;
+            {/* Progress Cards */}
+            <div className="flex flex-wrap justify-center gap-8 ">
+                {['SAO', 'SGO'].map(type => {
+                    const userSP = parseInt(userdata?.[`${type.toLowerCase()}sp`] || "0");
+                    const baseSP = parseInt(data?.UserDetails?.[0]?.[`${type.toLowerCase()}sp`] || "0");
+                    const current = userSP - baseSP;
 
-                return (
-                    <div
-                        key={type}
-                        className="bgw border border-[#C8B6A6] rounded-lg shadow-lg w-full max-w-md p-4"
-                    >
-                        <div className="flex items-center justify-between mb-4 border-b pb-2 border-[#CBBCAF]">
-                            <h2 className="text-xl font-semibold text-[#5A3E36]">{type} SP</h2>
-                            <span className="text-sm text-[#9C7B6A] italic">Progress Overview</span>
-                        </div>
+                    const userLevel = data.UserDetails[0].userlevel;
+                    const levelTarget = data.levels?.find(lvl => lvl.level === userLevel);
+                    const target = levelTarget ? parseInt(levelTarget[type.toLowerCase()] || "0") : 0;
 
-                        <div className="flex flex-col gap-4">
-                            <div className="flex justify-between bg-[#FFF8F0] rounded-lg px-4 py-3 border border-[#E5D4C1]">
-                                <span className="text-[#6B4C3B] font-medium">Current Achieve</span>
-                                <span className="text-[#3E7C59] font-semibold">{current} SP</span>
+                    const isAchieved = current >= target;
+
+                    return (
+                        <div
+                            key={type}
+                            className="bg-white border border-[#E5D4C1] rounded-2xl shadow-lg w-full max-w-sm p-5 "
+                        >
+                            {isAchieved && (
+                                <div className="text-center bg-green-50 border border-green-200 text-green-700 py-2 px-3 rounded-lg shadow-sm mb-4 ">
+                                    🎉 Great job! You have achieved your target!
+                                </div>
+                            )}
+                            <div className="flex items-center justify-between mb-4 border-b pb-2 border-[#CBBCAF]">
+                                <h2 className="text-xl font-semibold text-[#5A3E36]">{type} SP</h2>
+                                <span className="text-sm text-[#9C7B6A] italic">Progress Overview</span>
                             </div>
 
-                            <div className="flex justify-between bg-[#FFF8F0] rounded-lg px-4 py-3 border border-[#E5D4C1]">
-                                <span className="text-[#6B4C3B] font-medium">Target</span>
-                                <span className="text-[#335C81] font-semibold">{target} SP</span>
+                            <div className="flex flex-col gap-4">
+                                <div className="flex justify-between bg-[#FFF8F0] rounded-lg px-4 py-3 border border-[#E5D4C1]">
+                                    <span className="text-[#6B4C3B] font-medium">Current Achieve</span>
+                                    <span className="text-[#3E7C59] font-semibold">{current} SP</span>
+                                </div>
+
+                                <div className="flex justify-between bg-[#FFF8F0] rounded-lg px-4 py-3 border border-[#E5D4C1]">
+                                    <span className="text-[#6B4C3B] font-medium">Target</span>
+                                    <span className="text-[#335C81] font-semibold">{target} SP</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                );
-            })}
+                    );
+                })}
+            </div>
         </div>
     );
 }

@@ -71,50 +71,63 @@ export default function Page() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4 sm:p-6">
-      <div className="w-full max-w-6xl bg-white shadow-lg p-6 sm:p-10 border border-gray-100 rounded-lg space-y-8">
-        <h1 className="text-3xl sm:text-5xl font-bold text-center text-gray-800">Bonanza Pendency</h1>
+    <div className="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F7DED0] p-6">
+      <div className="max-w-5xl mx-auto">
 
-        <div className="text-center bg-gradient-to-r from-[#FFEFE6] to-[#FFF7F0] text-gray-700 p-4 sm:p-5 font-medium shadow-sm rounded-md">
-          {formatDateRange(data.datefrom, data.dateto)}
-          <div className="text-lg sm:text-2xl text-blue-800 mt-2 bg-white inline-block rounded px-3 py-1">{data.title}</div>
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-[#5A3E36]">Bonanza Pendency</h1>
+          <p className="text-gray-700 mt-2">{formatDateRange(data.datefrom, data.dateto)}</p>
+          <div className="mt-2 inline-block bg-white px-4 py-2 rounded-lg shadow text-lg font-semibold text-blue-800">
+            {data.title}
+          </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm sm:text-base text-left rounded-xl overflow-hidden">
-            <thead className="bg-[#FFEFE6] text-gray-800">
-              <tr>
-                <th className="p-3 sm:p-4 font-semibold">Type</th>
-                <th className="p-3 sm:p-4 font-semibold">Current Achieve</th>
-                <th className="p-3 sm:p-4 font-semibold">Target</th>
-                <th className="p-3 sm:p-4 font-semibold">Remain</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-600">
-              {['SAO', 'SGO'].map(type => {
-                const userSP = parseInt(userdata?.[`${type.toLowerCase()}sp`] || "0");
-                const baseSP = parseInt(data?.UserDetails?.[0]?.[`${type.toLowerCase()}sp`] || "0");
+        {/* Cards */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {['SAO', 'SGO'].map(type => {
+            const userSP = parseInt(userdata?.[`${type.toLowerCase()}sp`] || "0");
+            const baseSP = parseInt(data?.UserDetails?.[0]?.[`${type.toLowerCase()}sp`] || "0");
+            const current = userSP - baseSP;
 
-                const current = userSP - baseSP;
+            const userLevel = data.UserDetails[0].userlevel;
+            const levelTarget = data.levels?.find(lvl => lvl.level === userLevel);
+            const target = levelTarget ? parseInt(levelTarget[type.toLowerCase()] || "0") : 0;
 
-                const userLevel = userdata?.level || "";
-                const levelTarget = data.levels?.find(lvl => lvl.level === userLevel);
-                const target = levelTarget ? parseInt(levelTarget[type.toLowerCase()] || "0") : 0;
+            const remain = Math.max(0, target - current);
+            const isAchieved = current >= target;
 
-                const remain = Math.max(0, target - current);
+            const progressPercent = target > 0 ? Math.min(100, (current / target) * 100) : 0;
 
-                return (
-                  <tr key={type} className="border-t border-gray-100 hover:bg-[#FFF7F0] transition">
-                    <td className="p-3 sm:p-4 font-medium">{type} RP</td>
-                    <td className="p-3 sm:p-4">{current} RP</td>
-                    <td className="p-3 sm:p-4">{target} RP</td>
-                    <td className="p-3 sm:p-4 text-rose-500 font-semibold">{remain} RP</td>
-                  </tr>
-                );
-              })}
-            </tbody>
+            return (
+              <div key={type} className="bg-white rounded-xl shadow-lg p-6 border border-[#E5D4C1] hover:shadow-xl transition">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold text-[#5A3E36]">{type} RP</h2>
+                  {isAchieved && (
+                    <span className="bg-green-500 text-white text-xs px-3 py-1 rounded-full">Great Job 🎉</span>
+                  )}
+                </div>
 
-          </table>
+                {/* Progress bar */}
+                <div className="w-full bg-gray-200 rounded-full h-4 mb-4">
+                  <div
+                    className={`h-4 rounded-full transition-all duration-500 ${isAchieved ? "bg-green-500" : "bg-[#FFBE98]"
+                      }`}
+                    style={{ width: `${progressPercent}%` }}
+                  ></div>
+                </div>
+
+                {/* Stats */}
+                <div className="flex justify-between text-sm text-gray-700 mb-2">
+                  <span>Current: <b>{current} RP</b></span>
+                  <span>Target: <b>{target} RP</b></span>
+                </div>
+                <div className={`text-sm font-semibold ${remain > 0 ? "text-rose-500" : "text-green-600"}`}>
+                  {remain > 0 ? `${remain} RP Remaining` : "Target Achieved ✅"}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
