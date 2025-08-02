@@ -74,7 +74,7 @@ export default function Page() {
     XLSX.writeFile(workbook, 'unpaid_closings.xlsx')
   }
   const handleSuccess = async (id, utr) => {
-    if (!utr || utr.trim() === '') return alert('UTR is required for success');
+    // if (!utr || utr.trim() === '') return alert('UTR is required for success');
 
     try {
       const res = await fetch('/api/closing/updatemonthly', {

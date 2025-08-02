@@ -74,7 +74,7 @@ export default function Page() {
     XLSX.writeFile(workbook, 'unpaid_closings.xlsx')
   }
   const handleSuccess = async (id, utr) => {
-    if (!utr || utr.trim() === '') return alert('UTR is required for success');
+    // if (!utr || utr.trim() === '') return alert('UTR is required for success');
 
     try {
       const res = await fetch('/api/closing/updatetravel', {
@@ -162,7 +162,6 @@ export default function Page() {
                 <th className="p-3 border">IFSC</th>
                 <th className="p-3 border">Bank</th>
                 <th className="p-3 border">Amount</th>
-                 <th className="p-3 border">Admin Charge (5%)</th>
                 <th className="p-3 border">Pay Amount</th>
                 <th className="p-3 border">Date</th>
                 <th className="p-3 border">Approve/Invalid</th>
@@ -179,7 +178,6 @@ export default function Page() {
                   <td className="p-3 border">{item.ifscCode || '-'}</td>
                   <td className="p-3 border">{item.bankName || '-'}</td>
                   <td className="p-3 border">{item.amount}</td>
-                  <td className="p-3 border">₹{item.charges}</td>
 
                   <td className="p-3 border">{item.payamount}</td>
                   <td className="p-3 border">{item.date}</td>

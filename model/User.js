@@ -92,8 +92,6 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-
-// Add a constant for clarity
 const DS_PREFIX = "VL";
 
 UserSchema.pre("save", async function (next) {
@@ -101,20 +99,37 @@ UserSchema.pre("save", async function (next) {
   if (!doc.isNew) return next();
 
   try {
-    const counter = await CounterModel.findByIdAndUpdate(
-      { _id: "dscode" },
-      { $inc: { sequence_value: 1 } },
-      { new: true, upsert: true }
-    );
+    let isUnique = false;
+    let attempts = 0;
+    let randomNumber, generatedCode;
 
-    // 'VL' + 6-digit, zero-padded number
-    doc.dscode = `${DS_PREFIX}${String(counter.sequence_value).padStart(6, "0")}`;
+    while (!isUnique && attempts < 10) { // max 10 tries to prevent infinite loop
+      attempts++;
 
+      // Generate a random 6-digit number
+      randomNumber = Math.floor(100000 + Math.random() * 900000);
+      generatedCode = `${DS_PREFIX}${randomNumber}`;
+
+      // Check uniqueness using the model of the current document
+      const existingUser = await this.constructor.findOne({ dscode: generatedCode }).lean();
+      if (!existingUser) {
+        isUnique = true;
+      }
+    }
+
+    if (!isUnique) {
+      return next(new Error("Unable to generate a unique DS code after multiple attempts."));
+    }
+
+    // Assign the generated code
+    doc.dscode = generatedCode;
     next();
+
   } catch (error) {
     next(error);
   }
 });
+
 
 
 

@@ -131,7 +131,9 @@ export default function Signup() {
             if (!formData.gender) newErrors.gender = "Please select a gender";
             if (!formData.group) newErrors.group = "Please select a Group";
             if (!formData.pdscode) newErrors.pdscode = "Please Enter Referral";
-
+            if (!referenceName) {
+                newErrors.pdscode = "Please verify the referral code";
+            }
             if (!formData.nomineeName) newErrors.nomineeName = "Please Enter Nominee Name";
             if (!formData.nomineeRelation) newErrors.nomineeRelation = "Please Select Nominee Relation";
             if (!formData.nomineeDOB) newErrors.nomineeDOB = "Please Enter Nominee DOB";
@@ -394,7 +396,7 @@ export default function Signup() {
                                             setNameTitle(selected);
 
                                             setFormData((prev) => {
-                                                const nameOnly = prev.name.replace(/^(Mr|Mrs|Miss)\s*/i, '').trim();
+                                                const nameOnly = prev.name.replace(/^(Mrs|Miss|Mr)\s*/i, '').trim();
                                                 return {
                                                     ...prev,
                                                     name: nameOnly ? `${selected} ${nameOnly}` : '',
@@ -414,7 +416,7 @@ export default function Signup() {
                                         name="name"
                                         value={formData.name}
                                         onChange={(e) => {
-                                            const raw = e.target.value.replace(/^(Mr|Mrs|Miss)\s*/i, '').trim();
+                                            const raw = e.target.value.replace(/^(Mrs|Miss|Mr)\s*/i, '').trim();
 
                                             // If name is cleared, also remove the title
                                             if (!raw) {
@@ -471,7 +473,7 @@ export default function Signup() {
                                             setFatherOrHusbandTitle(selected);
 
                                             setFormData((prev) => {
-                                                const base = prev.fatherOrHusbandName.replace(/^(Mr|Mrs|Miss)\s*/i, '').trim();
+                                                const base = prev.fatherOrHusbandName.replace(/^(S\/O|D\/O|W\/O)\s*/i, '').trim();
                                                 return {
                                                     ...prev,
                                                     fatherOrHusbandName: base ? `${selected} ${base}` : '',
@@ -491,9 +493,8 @@ export default function Signup() {
                                         name="fatherOrHusbandName"
                                         value={formData.fatherOrHusbandName}
                                         onChange={(e) => {
-                                            const raw = e.target.value.replace(/^(Mr|Mrs|Miss)\s*/i, '').trim();
+                                            const raw = e.target.value.replace(/^(S\/O|D\/O|W\/O)\s*/i, '').trim();
 
-                                            // If cleared, also remove the title
                                             if (!raw) {
                                                 setFatherOrHusbandTitle('');
                                                 handleChange({ target: { name: "fatherOrHusbandName", value: "" } });
@@ -510,6 +511,7 @@ export default function Signup() {
                                         className="block w-full px-4 py-3 text-gray-500 bg-white border border-gray-200 rounded-md placeholder:text-gray-400 focus:border-[#161950] focus:outline-none focus:ring-[#161950] sm:text-sm"
                                         required
                                     />
+
 
                                 </div>
                                 {errors.fatherOrHusbandName && <p className="text-red-500 text-xs">{errors.fatherOrHusbandName}</p>}

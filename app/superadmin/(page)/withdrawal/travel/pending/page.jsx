@@ -112,8 +112,6 @@ export default function Page() {
                 <th className="p-3 border">IFSC</th>
                 <th className="p-3 border">Bank</th>
                 <th className="p-3 border">Amount</th>
-              <th className="p-3 border">Admin Charge (3%)</th>
-                <th className="p-3 border">TDS (2%)</th>
                 <th className="p-3 border">Pay Amount</th>
                 <th className="p-3 border">Date</th>
               </tr>
@@ -134,8 +132,6 @@ export default function Page() {
                   <td className="p-3 border">{item.ifscCode || '-'}</td>
                   <td className="p-3 border">{item.bankName || '-'}</td>
                   <td className="p-3 border">{item.amount}</td>
-                   <td className="p-3 border">₹{(item.charges * 0.6).toFixed(2)}</td> {/* TDS */}
-                  <td className="p-3 border">₹{(item.charges * 0.4).toFixed(2)}</td> {/* Admin Charge */}
                   <td className="p-3 border">{item.payamount}</td>
                   <td className="p-3 border">{item.date}</td>
                 </tr>

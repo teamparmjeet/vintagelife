@@ -32,7 +32,7 @@ export async function PATCH(request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Closing Travel fung updated successfully',
+      message: 'Closing Travel fund updated successfully',
       data: updated,
     });
   } catch (error) {
