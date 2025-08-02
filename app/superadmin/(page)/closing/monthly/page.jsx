@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import * as XLSX from 'xlsx'
 import axios from 'axios'
+import Link from 'next/link'
 export default function Page() {
   const [showModal, setShowModal] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -127,8 +128,11 @@ export default function Page() {
 
   return (
     <div className="p-4 space-y-6">
-      <div className="flex flex-wrap justify-between gap-4">
-        <div>
+      <Link href="/superadmin/Level/updateuser" className=' bg-red-600 p-1 rounded text-white'>
+        Before Closing make sure all user level is updated Clich here -
+      </Link>
+      <div className="flex flex-wrap justify-between gap-4 mt-4">
+        <div className=' flex flex-col gap-2'>
 
           <button
             onClick={() => setShowModal(true)}
@@ -136,6 +140,7 @@ export default function Page() {
           >
             Monthly Closing
           </button>
+
         </div>
         <div className=' flex flex-wrap gap-2'>
 
