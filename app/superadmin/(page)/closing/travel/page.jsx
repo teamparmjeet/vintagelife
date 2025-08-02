@@ -63,7 +63,7 @@ export default function Page() {
       IFSC: item.ifscCode,
       Bank: item.bankName,
       Amount: item.amount,
-      Charges: item.charges,
+      // Charges: "0",
       'Pay Amount': item.payamount,
       Date: item.date
     }))

@@ -62,8 +62,7 @@ export default function Page() {
             IFSC: item.ifscCode,
             Bank: item.bankName,
             Amount: item.amount,
-            'TDS': (item.charges / 2).toFixed(2),
-            'TDS': (item.charges / 3).toFixed(2),
+            'TDS': (item.charges / 5).toFixed(2),
             'Pay Amount': item.payamount,
             ApproveDate: item.statusapprovedate,
         }))

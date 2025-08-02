@@ -32,7 +32,7 @@ export async function POST(req) {
         ifscCode: user.ifscCode || "N/A",
         bankName: user.bankName || "N/A",
         amount: finalAmount.toFixed(2),                 // amount = 570
-        charges: charges.toFixed(2),                    // 5% of 570
+        charges: "0",                    // 5% of 570
         payamount: payamount.toFixed(2),                // 15% of 570
         date: new Date().toISOString().split("T")[0],
       });

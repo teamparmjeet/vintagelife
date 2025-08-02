@@ -79,7 +79,7 @@ export default function Dashboard() {
         ]);
         setPanelData(panelResponse.data);
         setTotalPerformance(
-          userResponse.data.totalPerformanceIncome + userResponse.data.totalBonusIncome
+          userResponse.data.totalPerformanceIncome
         );
       } catch (error) {
         console.error("Error fetching panel data:", error);
@@ -185,7 +185,7 @@ export default function Dashboard() {
         type: "currency",
       },
       {
-        title: "Royalty Income",
+        title: "Star Level Bonus",
         count: totalPerformance || 0,
         color: "#eab308",
         Icon: Award,

@@ -124,7 +124,7 @@ export default function Page() {
                     levelname: nextLevel.level_name,
                     type: "level update",
                     amount: "0",
-                    bonus_income: nextLevel.bonus_income?.toString() || "0",
+                    // bonus_income: nextLevel.bonus_income?.toString() || "0",
                     sp: "0",
                     orderno: "",
                     referencename: "",

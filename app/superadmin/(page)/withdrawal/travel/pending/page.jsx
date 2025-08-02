@@ -50,7 +50,7 @@ export default function Page() {
     const worksheet = XLSX.utils.json_to_sheet(formatted)
     const workbook = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Selected Closings')
-    XLSX.writeFile(workbook, 'Invalid.xlsx')
+    XLSX.writeFile(workbook, 'Pending.xlsx')
   }
 
   const handleSelectAll = (e) => {
