@@ -1,6 +1,7 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import ClosingHistoryModel from "@/model/ClosingHistory";
+import TravelfundModel from "@/model/travelfund";
 import OrderModel from "@/model/Order";
 export async function POST(req) {
     await dbConnect();
@@ -86,6 +87,34 @@ export async function POST(req) {
         const successWithdrawals = successWithdrawalsAgg[0]?.total || 0;
         const pendingWithdrawals = pendingWithdrawalsAgg[0]?.total || 0;
 
+          const successWithdrawalsTravelAgg = await TravelfundModel.aggregate([
+            { $match: { status: true } },
+            {
+                $group: {
+                    _id: null,
+                    total: { $sum: { $toDouble: "$payamount" } },
+                },
+            },
+        ]);
+
+        const pendingWithdrawalsTravelAgg = await TravelfundModel.aggregate([
+            { $match: { status: false } },
+            {
+                $group: {
+                    _id: null,
+                    total: { $sum: { $toDouble: "$payamount" } },
+                },
+            },
+        ]);
+
+        const pendingCountTravel = await TravelfundModel.countDocuments({
+            status: false,
+            invalidstatus: false,
+        });
+
+        const successWithdrawalstravel = successWithdrawalsTravelAgg[0]?.total || 0;
+        const pendingWithdrawalstravel = pendingWithdrawalsTravelAgg[0]?.total || 0;
+
         return Response.json({
             totalUsers,
             activeUsers,
@@ -96,6 +125,10 @@ export async function POST(req) {
             successWithdrawals,
             pendingWithdrawals,
             pendingCount,
+
+            successWithdrawalstravel,  
+            pendingWithdrawalstravel,  
+            pendingCounttravel: pendingCountTravel, 
         });
     } catch (error) {
         console.error("Error getting stats:", error);

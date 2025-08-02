@@ -31,29 +31,35 @@ const SkeletonBox = () => (
 // --- Refined Card Component ---
 const BoxItem = ({ number, title, href, Icon, color = "text-slate-700" }) => {
     const content = (
-        <div className="group w-full p-4 bg-white rounded-xl shadow-md">
+        <div className="group w-full p-5 bg-white rounded-2xl shadow-md hover:shadow-xl ">
             <div className="flex items-center justify-between">
                 <div className="text-left">
-                    <h2 className={`text-4xl font-bold ${color}`}>
+                    <h2 className={`text-4xl font-extrabold ${color}`}>
                         {new Intl.NumberFormat('en-IN').format(number)}
                     </h2>
-                    <h3 className="text-md text-slate-500 font-medium">{title}</h3>
+                    <h3 className="text-md text-slate-500 font-medium mt-1">
+                        {title}
+                    </h3>
                 </div>
-                <div className={`p-3 bg-slate-100 rounded-lg`}>
+                <div className={`p-4 rounded-xl bg-gradient-to-tr from-slate-100 to-white group-hover:from-slate-200 group-hover:to-white transition-all duration-300`}>
                     <Icon className={`w-7 h-7 ${color}`} strokeWidth={1.5} />
                 </div>
             </div>
+
         </div>
     );
 
-    return href ? (
-        <Link href={href} className="block w-full">
-            {content}
-        </Link>
-    ) : (
-        <div className="w-full">{content}</div>
-    );
+    if (href) {
+        return (
+            <Link href={href} className="block">
+                {content}
+            </Link>
+        );
+    }
+
+    return content;
 };
+
 
 // --- Main Page Component ---
 export default function Page() {
@@ -71,7 +77,7 @@ export default function Page() {
                 setData({
                     totalUsers: 0, activeUsers: 0, pendingUsers: 0, suspendedUsers: 0,
                     todayRegistrations: 0, todayGreen: 0, successWithdrawals: 0,
-                    pendingWithdrawals: 0, pendingCount: 0
+                    pendingWithdrawals: 0, pendingCount: 0, successWithdrawalstravel: 0, pendingWithdrawalstravel: 0, pendingCounttravel: 0
                 });
             } finally {
                 setLoading(false);
@@ -137,6 +143,27 @@ export default function Page() {
         {
             title: "Pending Count",
             dataKey: "pendingCount",
+            Icon: ClipboardList,
+            color: "text-fuchsia-600",
+        },
+
+        {
+            title: "Success Withdrawals (Travel Fund)",
+            dataKey: "successWithdrawalstravel",
+            href: "/superadmin/withdrawal/travel/success",
+            Icon: BadgeIndianRupee,
+            color: "text-indigo-600",
+        },
+        {
+            title: "Pending Withdrawals (Travel Fund)",
+            dataKey: "pendingWithdrawalstravel",
+            href: "/superadmin/withdrawal/travel/pending",
+            Icon: Clock,
+            color: "text-orange-600",
+        },
+        {
+            title: "Pending Count (Travel Fund)",
+            dataKey: "pendingCounttravel",
             Icon: ClipboardList,
             color: "text-fuchsia-600",
         },

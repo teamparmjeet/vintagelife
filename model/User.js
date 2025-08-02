@@ -135,6 +135,6 @@ UserSchema.pre("save", async function (next) {
 
 
 
-const UserModel = mongoose.models.user6 || mongoose.model("user6", UserSchema);
+const UserModel = mongoose.models.user7 || mongoose.model("user7", UserSchema);
 
 export default UserModel;
