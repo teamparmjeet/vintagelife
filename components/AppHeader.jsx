@@ -5,14 +5,14 @@ import { useSidebar } from "@/app/context/SidebarContext";
 import { ThemeToggleButton } from "./ThemeToggleButton";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import { LogOut, ChevronDown } from "lucide-react";
+import { LogOut, ChevronDown, Phone } from "lucide-react";
 import Image from "next/image";
 import axios from "axios";
 import Cookies from "js-cookie";
 
 // Custom hook for fetching user data
 const useUserData = (session) => {
-  const [userData, setUserData] = useState({ img: "", userstatus: "" });
+  const [userData, setUserData] = useState({ img: "", userstatus: "", dsid: "", mobile: "", usertype: "" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -28,12 +28,15 @@ const useUserData = (session) => {
           `/api/user/find-admin-byemail/${session.user.email}`
         );
         const data = response.data;
-        console.log(data)
+
 
         if (data?.name) {
           setUserData({
             img: data.image,
             userstatus: data.defaultdata,
+            dsid: data.dscode,
+            mobile: data.mobileNo,
+            usertype: data.usertype,
           });
 
           if (data.defaultdata !== "user") {
@@ -75,7 +78,7 @@ const AppHeader = () => {
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   const inputRef = useRef(null);
   const { data: session } = useSession();
-  const { img, userstatus, loading, error } = useUserData(session);
+  const { img, userstatus, dsid, mobile, usertype, loading, error } = useUserData(session);
 
   const handleToggle = () => {
     if (window.innerWidth >= 991) {
@@ -164,18 +167,35 @@ const AppHeader = () => {
               />
             </button>
             {isApplicationMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
+              <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden animate-fadeIn">
+                <div className="px-4 py-3 border-b border-gray-200">
+                  <p className="text-sm font-medium text-gray-900">DSID: {dsid}</p>
+                  <div className="flex items-center gap-1 text-sm text-gray-600">
+                    <Phone className="h-4 w-4 text-gray-500" />
+                    {mobile}
+                  </div>
+                  <p
+                    className={`text-xs font-semibold mt-1 px-2 py-1 rounded-full inline-block ${usertype === 0
+                        ? "bg-red-100 text-red-600"
+                        : "bg-green-100 text-green-600"
+                      }`}
+                  >
+                    {usertype === 0 ? "Inactive" : "Active"}
+                  </p>
+                </div>
+
                 <button
                   onClick={() => {
                     Cookies.remove("hasSeenModal");
                     signOut();
                   }}
-                  className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
+                  className="flex w-full items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                 >
-                  <LogOut className="h-5 w-5" />
+                  <LogOut className="h-5 w-5 text-gray-500" />
                   <span>Logout</span>
                 </button>
               </div>
+
             )}
           </div>
         </div>

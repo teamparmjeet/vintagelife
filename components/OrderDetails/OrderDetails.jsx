@@ -209,9 +209,9 @@ export default function OrderDetails({ data }) {
                 {/* Header */}
                 <div className="text-center mb-2">
                     <h1 className="font-bold text-lg">VINTAGE LIFE WELLNESS PVT. LTD.</h1>
-                    <p className="font-semibold">Address - Hore Chandra nagar.</p>
-                    <p className="font-semibold">DTR P9 Noel School Gird Gwalior Fort Gwalior Pin code - 474008</p>
-                    <p className="font-semibold mt-4">GSTIN : 1234567890</p>
+                    <p className="font-semibold">Address - 2k2 keshopura Kamla Nehru Nagar</p>
+                    <p className="font-semibold">Jaipur Rajasthan 302006</p>
+                    <p className="font-semibold mt-4">GSTIN : 08AALCV2376C1Z7</p>
                 </div>
 
                 {/* Invoice Info */}
@@ -264,7 +264,7 @@ export default function OrderDetails({ data }) {
                                 <th className="border p-1">SGST <span className="text-xs block">Rate Amount</span></th>
                                 <th className="border p-1">IGST <span className="text-xs block">Amount</span></th>
                                 <th className="border p-1">Tax Rate</th>
-                                <th className="border p-1">Total SP</th>
+                                <th className="border p-1">Total RP</th>
                                 <th className="border p-1">Total Amount</th>
                             </tr>
                         </thead>

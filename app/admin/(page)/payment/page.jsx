@@ -62,7 +62,7 @@ export default function Page() {
             IFSC: item.ifscCode,
             Bank: item.bankName,
             Amount: item.amount,
-            'Admin Charge': (item.charges / 2).toFixed(2),
+            'TDS': (item.charges / 2).toFixed(2),
             'TDS': (item.charges / 3).toFixed(2),
             'Pay Amount': item.payamount,
             ApproveDate: item.statusapprovedate,
@@ -119,7 +119,7 @@ export default function Page() {
                                 <th className="p-3 border">IFSC</th>
                                 <th className="p-3 border">Bank</th>
                                 <th className="p-3 border">Amount</th>
-                                <th className="p-3 border">Admin Charge (5%)</th>
+                                <th className="p-3 border">TDS (5%)</th>
                                 {/* <th className="p-3 border">TDS (2%)</th> */}
                                 <th className="p-3 border">Pay Amount</th>
                                 <th className="p-3 border">Approve Date</th>

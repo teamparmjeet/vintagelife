@@ -481,9 +481,9 @@ export default function Signup() {
                                         className="px-1 py-3 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-[#161950]"
                                     >
                                         <option value="">Title</option>
-                                        <option value="Mr">Mr</option>
-                                        <option value="Mrs">Mrs</option>
-                                        <option value="Miss">Miss</option>
+                                        <option value="S/O">S/O</option>
+                                        <option value="D/O">D/O</option>
+                                        <option value="W/O">W/O</option>
                                     </select>
 
                                     <input

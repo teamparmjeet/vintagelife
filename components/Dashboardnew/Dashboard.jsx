@@ -87,7 +87,7 @@ export default function Dashboard() {
           axios.get(`/api/user/find-admin-byemail/${session.user.email}`),
         ]);
         setPanelData(panelResponse.data);
-        setTotalPerformance(userResponse.data.totalPerformanceIncome + userResponse.data.totalBonusIncome);
+        setTotalPerformance(userResponse.data.totalPerformanceIncome);
       } catch (error) {
         console.error("Error fetching panel data:", error);
         // Optionally, set an error state here to show an error message
@@ -108,7 +108,7 @@ export default function Dashboard() {
         Icon: Target,
       },
       {
-        title: "SGO SP",
+        title: "SGO RP",
         count: panelData.mainUser?.sgosp || 0,
         color: "#f28430",
         Icon: Target,
@@ -138,13 +138,13 @@ export default function Dashboard() {
         Icon: UserCheck,
       },
       {
-        title: "This Week SAO SP",
+        title: "This Week SAO RP",
         count: panelData.currentWeekSaoSP || 0,
         color: "#ffb347",
         Icon: Calendar,
       },
       {
-        title: "This Week SGO SP",
+        title: "This Week SGO RP",
         count: panelData.currentWeekSgoSP || 0,
         color: "#7f55a3",
         Icon: Calendar,
@@ -170,18 +170,6 @@ export default function Dashboard() {
       },
 
       {
-        title: "Current Weak Sao Rp",
-        count: panelData.currentWeekSaoSP || 0,
-        color: "#8b5cf6",
-        Icon: Target,
-      },
-      {
-        title: "Current Weak Sgo Rp",
-        count: panelData.currentWeekSgoSP || 0,
-        color: "#8b5cf6",
-        Icon: Target,
-      },
-      {
         title: "Pair Matching Income",
         count:
           Math.min(
@@ -193,7 +181,7 @@ export default function Dashboard() {
         type: "currency",
       },
       {
-        title: "Royalty Income",
+        title: "Star Level Bonus",
         count: totalPerformance || 0,
         color: "#eab308",
         Icon: Award,

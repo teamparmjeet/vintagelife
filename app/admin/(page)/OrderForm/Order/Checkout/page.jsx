@@ -30,7 +30,7 @@ export default function Page() {
         shippingAddress: "",
         shippingmobile: "",
         shippinpPincode: "",
-        paymentmod: "Cash",
+        paymentmod: "",
         salegroup: "",
         productDetails: [{ productgroup: "", product: "", quantity: "" }],
         shippingcharge: "",
@@ -229,7 +229,7 @@ export default function Page() {
                             <SelectField
                                 label="Medium of Payment"
                                 name="paymentmod"
-                                options={["Cash"]}
+                                options={["Cash","Online"]}
                                 value={formData.paymentmod}
                                 onChange={handleChange}
                             />

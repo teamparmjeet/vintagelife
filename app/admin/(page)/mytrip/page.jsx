@@ -48,7 +48,6 @@ export default function Page() {
           throw new Error("Levels fetch failed");
         }
 
-        // Keep levels as returned from API (original order)
         setUserLevel(userData.level || "");
         setLevels(lvlJson.data);
       } catch (e) {
@@ -63,9 +62,15 @@ export default function Page() {
     return () => controller.abort();
   }, [session?.user?.email, status]);
 
-  const currentLevelIndex = useMemo(() => {
-    return levels.findIndex((lvl) => lvl.level_name === userLevel);
-  }, [levels, userLevel]);
+  // ✅ Filter only levels with trip assigned
+  const tripLevels = useMemo(() => {
+    return levels.filter((level) => level.tour && level.tour.trim() !== "");
+  }, [levels]);
+
+  // ✅ Find user's current trip index
+  const currentTripLevelIndex = useMemo(() => {
+    return tripLevels.findIndex((lvl) => lvl.level_name === userLevel);
+  }, [tripLevels, userLevel]);
 
   if (loading) {
     return (
@@ -93,58 +98,53 @@ export default function Page() {
   }
 
   return (
-  <div className="p-6">
-  <h2 className="text-2xl font-bold mb-6 text-center">My Trips</h2>
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-6 text-center">My Trips</h2>
 
-  <div className="space-y-4">
-    {levels.map((level, index) => {
-      const isAchieved = index <= currentLevelIndex;
-      const isNext = index === currentLevelIndex + 1;
+      <div className="space-y-4">
+        {tripLevels.map((level, index) => {
+          const isAchieved = index <= currentTripLevelIndex;
+          const isNext = index === currentTripLevelIndex + 1;
 
-      return (
-        <div
-          key={level._id}
-          className={`flex items-center justify-between  rounded p-2 shadow-md border transition-all ${
-            isAchieved
-              ? "bg-green-100 border-green-400"
-              : isNext
-              ? "bg-yellow-50 border-yellow-300 opacity-80"
-              : "bg-gray-100 border-gray-300 opacity-50"
-          }`}
-        >
-          {/* Level info */}
-          <div>
-            <h3 className="text-lg font-semibold">{level.level_name}</h3>
-            {level.tour ? (
-              <p className="text-gray-600">
-                ✈️ Trip: <span className="font-medium">{level.tour}</span>
-              </p>
-            ) : (
-              <p className="text-gray-500">No Trip Assigned</p>
-            )}
-          </div>
+          return (
+            <div
+              key={level._id}
+              className={`flex items-center justify-between rounded p-2 shadow-md border transition-all ${
+                isAchieved
+                  ? "bg-green-100 border-green-400"
+                  : isNext
+                  ? "bg-yellow-50 border-yellow-300 opacity-80"
+                  : "bg-gray-100 border-gray-300 opacity-50"
+              }`}
+            >
+              {/* Level info */}
+              <div>
+                <h3 className="text-lg font-semibold">{level.level_name}</h3>
+                <p className="text-gray-600">
+                  ✈️ Trip: <span className="font-medium">{level.tour}</span>
+                </p>
+              </div>
 
-          {/* Status Badge */}
-          <div>
-            {isAchieved ? (
-              <span className="text-sm font-semibold text-green-700 bg-green-200 px-3 py-1 rounded-full">
-                ✅ Achieved
-              </span>
-            ) : isNext ? (
-              <span className="text-sm font-semibold text-yellow-700 bg-yellow-200 px-3 py-1 rounded-full">
-                ⏭ Upcoming
-              </span>
-            ) : (
-              <span className="text-sm font-semibold text-gray-500 bg-gray-200 px-3 py-1 rounded-full">
-                Locked
-              </span>
-            )}
-          </div>
-        </div>
-      );
-    })}
-  </div>
-</div>
-
+              {/* Status Badge */}
+              <div>
+                {isAchieved ? (
+                  <span className="text-sm font-semibold text-green-700 bg-green-200 px-3 py-1 rounded-full">
+                    ✅ Achieved
+                  </span>
+                ) : isNext ? (
+                  <span className="text-sm font-semibold text-yellow-700 bg-yellow-200 px-3 py-1 rounded-full">
+                    ⏭ Upcoming
+                  </span>
+                ) : (
+                  <span className="text-sm font-semibold text-gray-500 bg-gray-200 px-3 py-1 rounded-full">
+                    Locked
+                  </span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

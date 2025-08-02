@@ -80,13 +80,13 @@ export default function Page() {
                                                     ₹ {(Number(item.performance_income) + Number(item.bonus_income)).toLocaleString("en-IN")}
                                                 </td>
 
-                                                {/* <td className="py-3 px-5">
+                                                 {/* <td className="py-3 px-5">
                                                     <Link href={`./update/${item._id}`}>
                                                         <span className="bgw text-xs font-semibold px-3 py-1 rounded-full textn">
                                                             Edit
                                                         </span>
                                                     </Link>
-                                                </td> */}
+                                                </td>  */}
                                             </tr>
                                         ))
                                 ) : (
