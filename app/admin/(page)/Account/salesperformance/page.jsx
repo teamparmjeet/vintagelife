@@ -8,172 +8,149 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export default function Page() {
   const { data: session, status } = useSession();
+  const dscode = session?.user?.dscode;
 
   const [data, setData] = useState([]);
-  const [totalIncome, setTotalIncome] = useState(0);
-  const [saorp, setSaorp] = useState(0);
-  const [sgorp, setSgorp] = useState(0);
-  const [totalBonus, setTotalBonus] = useState(0);
-  const [totalPerformance, setTotalPerformance] = useState(0);
-  const [fromDate, setFromDate] = useState(null);
-  const [toDate, setToDate] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
-  const fetchData = async () => {
-    const dscode = session?.user?.dscode;
-    if (!dscode) return;
+  const toUTCDateString = (date) => {
+    if (!date) return "";
+    return new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    )
+      .toISOString()
+      .split("T")[0];
+  };
 
-    try {
-      const params = new URLSearchParams();
-      if (fromDate) params.append("from", fromDate.toISOString());
-      if (toDate) params.append("to", toDate.toISOString());
+  const fetchData = () => {
+    if (dscode) {
+      setLoading(true);
+      let url = `/api/userAccount/royalty/${String(dscode)}`;
 
-      const res = await axios.get(`/api/PaymentHistory/user/${dscode}?${params}`);
-      const records = res.data.data;
+      if (startDate && endDate) {
+        const start = toUTCDateString(startDate);
+        const end = toUTCDateString(endDate);
+        url += `?startDate=${start}&endDate=${end}`;
+      }
 
-      setData(records);
-
-      let total = 0;
-      let sao = 0;
-      let sgo = 0;
-      let bonusSum = 0;
-      let perfSum = 0;
-
-      records.forEach((item) => {
-        const bonus = parseFloat(item.bonus_income || 0);
-        const perf = parseFloat(item.performance_income || 0);
-        const sp = parseFloat(item.sp || 0);
-
-        total += bonus + perf + sp;
-        bonusSum += bonus;
-        perfSum += perf;
-
-        if (item.group === "SAO") sao += sp;
-        if (item.group === "SGO") sgo += sp;
-      });
-
-      setTotalIncome(total);
-      setSaorp(sao);
-      setSgorp(sgo);
-      setTotalBonus(bonusSum);
-      setTotalPerformance(perfSum);
-    } catch (err) {
-      console.error("Error fetching payment data:", err);
+      axios
+        .get(url)
+        .then((res) => {
+          setData(res.data.data || []);
+        })
+        .catch((err) => {
+          console.error("Error fetching data:", err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
 
   useEffect(() => {
-    if (status === "authenticated") {
-      fetchData();
-    }
-  }, [status, session]);
+    fetchData();
+  }, [dscode]);
 
-  if (status === "loading") return <div>Loading...</div>;
+  if (status === "loading" || loading) {
+    return (
+      <div className="p-6 flex justify-center items-center h-40 text-lg font-medium text-gray-600">
+        Loading...
+      </div>
+    );
+  }
 
   return (
-    <div className="p-6 overflow-x-auto">
+    <div className="p-6">
+      {/* Page Title */}
+      <h1 className="text-3xl font-semibold mb-6 text-gray-800 border-b pb-2">
+       Royalty Income
+      </h1>
+
       {/* Date Filters */}
-      <div className="mb-4 flex gap-4 items-end">
+      <div className="flex flex-wrap gap-4 mb-6 bg-gray-50 p-4 rounded-lg shadow-sm">
         <div>
-          <label className="block text-sm font-medium text-gray-700">From Date</label>
+          <label className="block text-sm font-medium mb-1 text-gray-700">
+            Start Date
+          </label>
           <DatePicker
-            selected={fromDate}
-            onChange={(date) => setFromDate(date)}
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
             dateFormat="yyyy-MM-dd"
-            className="border px-3 py-1 rounded w-full"
-            placeholderText="Select start date"
-            maxDate={new Date()}
+            className="border border-gray-300 px-3 py-2 rounded-lg w-44 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">To Date</label>
+          <label className="block text-sm font-medium mb-1 text-gray-700">
+            End Date
+          </label>
           <DatePicker
-            selected={toDate}
-            onChange={(date) => setToDate(date)}
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
             dateFormat="yyyy-MM-dd"
-            className="border px-3 py-1 rounded w-full"
-            placeholderText="Select end date"
-            maxDate={new Date()}
+            className="border border-gray-300 px-3 py-2 rounded-lg w-44 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
-        <button
-          onClick={fetchData}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Apply Filter
-        </button>
+        <div className="flex items-end">
+          <button
+            onClick={fetchData}
+            className="px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition-all duration-200"
+          >
+            Filter
+          </button>
+        </div>
       </div>
 
-      {/* Summary Table */}
-      <div className="mb-4">
-        <table className="min-w-full text-sm text-left border border-gray-300 bg-white shadow rounded-lg overflow-hidden">
-          <thead className="bg-gray-100 text-gray-700">
-            <tr>
-              <th className="px-4 py-2 border">Pair Matching Income</th>
-              <th className="px-4 py-2 border">Total Bonus Income</th>
-              <th className="px-4 py-2 border">Total Performance Income</th>
-              <th className="px-4 py-2 border">Total </th>
+      {/* Table */}
+      <div className="overflow-x-auto bg-white rounded-lg shadow">
+        <table className="w-full text-sm border-collapse">
+          <thead>
+            <tr className="bg-blue-50 text-gray-700">
+              <th className="p-3 border">Name</th>
+              <th className="p-3 border">Amount</th>
+              <th className="p-3 border">Charges</th>
+              <th className="p-3 border">Pay Amount</th>
+              <th className="p-3 border">Status Approved Date</th>
             </tr>
           </thead>
           <tbody>
-            <tr className="text-gray-800">
-              <td className="px-4 py-2 border text-green-700">₹{Math.min(saorp, sgorp) * 10}</td>
-              <td className="px-4 py-2 border text-blue-700">₹{totalBonus}</td>
-              <td className="px-4 py-2 border text-purple-700">₹{totalPerformance}</td>
-              <td className="px-4 py-2 border font-semibold text-black">
-        ₹
-        {Math.min(saorp, sgorp) * 10 + totalBonus + totalPerformance}
-      </td>
-            </tr>
+            {data.length > 0 ? (
+              data.map((item) => (
+                <tr
+                  key={item._id}
+                  className="hover:bg-blue-50 transition-colors"
+                >
+                  <td className="p-3 border text-gray-800">{item.name}</td>
+                  <td className="p-3 border text-gray-800">
+                    ₹{parseFloat(item.amount).toLocaleString("en-IN")}
+                  </td>
+                  <td className="p-3 border text-gray-800">
+                    ₹{parseFloat(item.charges).toLocaleString("en-IN")}
+                  </td>
+                  <td className="p-3 border text-gray-800">
+                    ₹{parseFloat(item.payamount).toLocaleString("en-IN")}
+                  </td>
+                  <td className="p-3 border text-gray-600">
+                    {item.statusapprovedate
+                      ? new Date(item.statusapprovedate).toLocaleDateString()
+                      : "-"}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  className="p-3 border text-center text-gray-500"
+                  colSpan="5"
+                >
+                  No records found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
-
-      {/* Main Data Table */}
-      <table className="min-w-full text-sm text-left border border-gray-200">
-        <thead className="bg-gray-100 text-gray-700">
-          <tr>
-            <th className="px-4 py-2 border">#</th>
-            {/* <th className="px-4 py-2 border">Group</th> */}
-            <th className="px-4 py-2 border">Rp</th>
-            <th className="px-4 py-2 border">Type</th>
-            <th className="px-4 py-2 border">Reference Name</th>
-            <th className="px-4 py-2 border">Bonus Income</th>
-            <th className="px-4 py-2 border">Performance Income</th>
-            <th className="px-4 py-2 border">SP</th>
-            <th className="px-4 py-2 border">Created At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr key={item._id} className="border-t hover:bg-gray-50">
-              <td className="px-4 py-2 border">{index + 1}</td>
-              {/* <td className="px-4 py-2 border">{item.group}</td> */}
-              <td className="px-4 py-2 border">{item.sp}</td>
-              <td className="px-4 py-2 border">{item.type}</td>
-              <td className="px-4 py-2 border">{item.referencename || "-"}</td>
-              <td className="px-4 py-2 border">₹{item.bonus_income || 0}</td>
-              <td className="px-4 py-2 border">₹{item.performance_income || 0}</td>
-              <td className="px-4 py-2 border">{item.sp || 0}</td>
-              <td className="px-4 py-2 border">
-                {new Date(item.createdAt).toLocaleDateString()}
-              </td>
-            </tr>
-          ))}
-          <tr className="font-semibold bg-gray-50">
-            <td colSpan={4} className="px-4 py-2 border text-right">Totals:</td>
-            <td className="px-4 py-2 border text-green-700">₹{totalBonus}</td>
-            <td className="px-4 py-2 border text-blue-700">₹{totalPerformance}</td>
-            <td className="px-4 py-2 border text-purple-700"></td>
-            <td className="px-4 py-2 border"></td>
-            <td className="px-4 py-2 border"></td>
-          </tr>
-        </tbody>
-      </table>
-
-      {/* <div className="mt-4 space-y-2 text-sm text-gray-700">
-        <div><span className="font-medium">SAO RP:</span> ₹{saorp}</div>
-        <div><span className="font-medium">SGO RP:</span> ₹{sgorp}</div>
-      </div> */}
     </div>
   );
 }
