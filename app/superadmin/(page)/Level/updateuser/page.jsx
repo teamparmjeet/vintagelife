@@ -176,8 +176,8 @@ export default function Page() {
                                     <th className="px-4 py-3">DS Code</th>
                                     <th className="px-4 py-3">Name</th>
                                     <th className="px-4 py-3">Current Level</th>
-                                    <th className="px-4 py-3 text-right">Total SAO SP</th>
-                                    <th className="px-4 py-3 text-right">Total SGO SP</th>
+                                    <th className="px-4 py-3 text-right">Total SAO RP</th>
+                                    <th className="px-4 py-3 text-right">Total SGO RP</th>
                                     <th className="px-4 py-3">Next Eligible Level</th>
                                 </tr>
                             </thead>

@@ -51,6 +51,8 @@ export default function Page() {
       return (
         <tr key={index}>
           <td className="border text-center px-3 py-2">{index + 1}</td>
+          <td className="border  font-semibold px-3 py-2">{data.level}</td>
+
           <td className="border text-center px-3 py-2">{totalSAO.toFixed(2)}</td>
           <td className="border text-center px-3 py-2">{totalSGO.toFixed(2)}</td>
           <td className="border text-center px-3 py-2">{userSAO.toFixed(2)}</td>
@@ -78,6 +80,7 @@ export default function Page() {
           <thead className="bg-gray-100">
             <tr>
               <th className="border px-3 py-2 text-center">Step</th>
+              <th className="border px-3 py-2 text-center">Level</th>
               <th className="border px-3 py-2 text-center">TotalSAOSP</th>
               <th className="border px-3 py-2 text-center">TotalSGOSP</th>
               <th className="border px-3 py-2 text-center">SAOSP</th>

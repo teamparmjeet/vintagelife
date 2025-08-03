@@ -89,6 +89,9 @@ export default function Bonanza() {
             {/* Progress Cards */}
             <div className="flex flex-wrap justify-center gap-8 ">
                 {['SAO', 'SGO'].map(type => {
+                    if (!data?.UserDetails?.[0]?.userlevel) {
+                        return null; // skip rendering this card if userlevel is missing
+                    }
                     const userSP = parseInt(userdata?.[`${type.toLowerCase()}sp`] || "0");
                     const baseSP = parseInt(data?.UserDetails?.[0]?.[`${type.toLowerCase()}sp`] || "0");
                     const current = userSP - baseSP;
