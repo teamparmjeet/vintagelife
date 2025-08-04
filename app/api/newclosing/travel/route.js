@@ -6,11 +6,21 @@ export async function POST(req) {
   await dbConnect();
 
   try {
-    const allUsers = await UserModel.find({ activesp: "100" });
+    const potentialUsers = await UserModel.find({});
+    const filteredUsers = [];
+
+    for (const user of potentialUsers) {
+      const hasSAO = await UserModel.exists({ pdscode: user.dscode, group: "SAO" });
+      const hasSGO = await UserModel.exists({ pdscode: user.dscode, group: "SGO" });
+
+      if (hasSAO && hasSGO) {
+        filteredUsers.push(user);
+      }
+    }
 
     let successfulPayouts = 0;
 
-    for (const user of allUsers) {
+    for (const user of filteredUsers) {
       const saosp = Number(user.saosp || 0);
       const sgosp = Number(user.sgosp || 0);
       const travellastMatchedSP = Number(user.travellastMatchedSP || 0);

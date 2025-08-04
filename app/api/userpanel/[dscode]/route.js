@@ -79,16 +79,16 @@ export async function GET(request) {
     let totalEarnSP = 0, totalSaoSP = 0, totalSgoSP = 0;
 
     if (mainUser.group === "SAO") {
-      totalSAO += 1;
-      if (mainUser.usertype === "1") totalActiveSAO += 1;
+
+      // if (mainUser.usertype === "1") totalActiveSAO += 1;
       totalEarnSP += parseFloat(mainUser.earnsp) || 0;
       totalSaoSP += parseFloat(mainUser.saosp) || 0;
       totalSgoSP += parseFloat(mainUser.sgosp) || 0;
     }
 
     if (mainUser.group === "SGO") {
-      totalSGO += 1;
-      if (mainUser.usertype === "1") totalActiveSGO += 1;
+
+      // if (mainUser.usertype === "1") totalActiveSGO += 1;
       totalEarnSP += parseFloat(mainUser.earnsp) || 0;
       totalSaoSP += parseFloat(mainUser.saosp) || 0;
       totalSgoSP += parseFloat(mainUser.sgosp) || 0;
@@ -153,7 +153,10 @@ export async function GET(request) {
     const userOrders = await OrderModel.find({
       status: true,
       dscode: ds,
-      createdAt: { $gte: startOfWeek, $lte: endOfWeek }
+      createdAt: {
+        $gte: mainUser.activedate ? new Date(mainUser.activedate) : startOfWeek,
+        $lte: endOfWeek
+      }
     });
 
     let currentWeekSaoSP = 0, currentWeekSgoSP = 0;

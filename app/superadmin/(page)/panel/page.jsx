@@ -77,7 +77,8 @@ export default function Page() {
                 setData({
                     totalUsers: 0, activeUsers: 0, pendingUsers: 0, suspendedUsers: 0,
                     todayRegistrations: 0, todayGreen: 0, successWithdrawals: 0,
-                    pendingWithdrawals: 0, pendingCount: 0, successWithdrawalstravel: 0, pendingWithdrawalstravel: 0, pendingCounttravel: 0
+                    pendingWithdrawals: 0, pendingCount: 0, successWithdrawalstravel: 0, pendingWithdrawalstravel: 0, pendingCounttravel: 0,
+                    successWithdrawalsMonthly: 0, pendingWithdrawalsMonthly: 0, pendingCountMonthly: 0,
                 });
             } finally {
                 setLoading(false);
@@ -129,23 +130,54 @@ export default function Page() {
             color: "text-teal-600",
         },
         {
-            title: "Success Withdrawals",
+            title: "Success Withdrawals (Pair)",
             dataKey: "successWithdrawals",
+            href: "/superadmin/withdrawal/success",
+
             Icon: BadgeIndianRupee,
             color: "text-indigo-600",
         },
         {
-            title: "Pending Withdrawals",
+            title: "Pending Withdrawals (Pair)",
             dataKey: "pendingWithdrawals",
+            href: "/superadmin/withdrawal/pending",
+
             Icon: Clock,
             color: "text-orange-600",
         },
         {
-            title: "Pending Count",
+            title: "Pending Count (Pair)",
             dataKey: "pendingCount",
             Icon: ClipboardList,
             color: "text-fuchsia-600",
         },
+
+
+
+        {
+            title: "Success Withdrawals (Royalty)",
+            dataKey: "successWithdrawalsMonthly",
+            href: "/superadmin/withdrawal/month/success",
+
+            Icon: BadgeIndianRupee,
+            color: "text-indigo-600",
+        },
+        {
+            title: "Pending Withdrawals (Royalty)",
+            dataKey: "pendingWithdrawalsMonthly",
+            href: "/superadmin/withdrawal/month/pending",
+
+            Icon: Clock,
+            color: "text-orange-600",
+        },
+        {
+            title: "Pending Count (Royalty)",
+            dataKey: "pendingCountMonthly",
+            Icon: ClipboardList,
+            color: "text-fuchsia-600",
+        },
+
+
 
         {
             title: "Success Withdrawals (Travel Fund)",

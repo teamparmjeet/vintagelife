@@ -15,11 +15,11 @@ const navItems = [
         name: "Admin Panel",
         path: "/superadmin/panel",
     },
-    {
-        icon: <Folder />,
-        name: "Dashboard",
-        path: "/superadmin/Dashboard",
-    },
+    // {
+    //     icon: <Folder />,
+    //     name: "Dashboard",
+    //     path: "/superadmin/Dashboard",
+    // },
 
 
     {

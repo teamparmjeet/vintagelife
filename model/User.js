@@ -74,7 +74,7 @@ const UserSchema = new Schema(
     ],
     wallet: { type: String, default: "0" },
     lastMatchedSP: { type: String, default: "0" },
-    travellastMatchedSP: { type: String, default: "0" },
+    travellastMatchedSP: { type: String, default: "1000" },
     branchName: { type: String },
     nomineebankName: { type: String },
     nomineeacnumber: { type: String },

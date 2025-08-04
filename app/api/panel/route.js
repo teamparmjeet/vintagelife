@@ -2,7 +2,7 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import ClosingHistoryModel from "@/model/ClosingHistory";
 import TravelfundModel from "@/model/travelfund";
-import OrderModel from "@/model/Order";
+import MonthlyClosingHistoryModel from "@/model/MonthleClosingHistory";
 export async function POST(req) {
     await dbConnect();
 
@@ -87,7 +87,7 @@ export async function POST(req) {
         const successWithdrawals = successWithdrawalsAgg[0]?.total || 0;
         const pendingWithdrawals = pendingWithdrawalsAgg[0]?.total || 0;
 
-          const successWithdrawalsTravelAgg = await TravelfundModel.aggregate([
+        const successWithdrawalsTravelAgg = await TravelfundModel.aggregate([
             { $match: { status: true } },
             {
                 $group: {
@@ -112,8 +112,39 @@ export async function POST(req) {
             invalidstatus: false,
         });
 
+
+
         const successWithdrawalstravel = successWithdrawalsTravelAgg[0]?.total || 0;
         const pendingWithdrawalstravel = pendingWithdrawalsTravelAgg[0]?.total || 0;
+
+
+
+        const successWithdrawalsMonthlyAgg = await MonthlyClosingHistoryModel.aggregate([
+            { $match: { status: true } },
+            {
+                $group: {
+                    _id: null,
+                    total: { $sum: { $toDouble: "$amount" } },
+                },
+            },
+        ]);
+
+        const pendingWithdrawalsMonthlyAgg = await MonthlyClosingHistoryModel.aggregate([
+            { $match: { status: false } },
+            {
+                $group: {
+                    _id: null,
+                    total: { $sum: { $toDouble: "$amount" } },
+                },
+            },
+        ]);
+
+        const pendingCountMonthly = await MonthlyClosingHistoryModel.countDocuments({
+            status: false,
+            invalidstatus: false,
+        });
+        const successWithdrawalsMonthly = successWithdrawalsMonthlyAgg[0]?.total || 0;
+        const pendingWithdrawalsMonthly = pendingWithdrawalsMonthlyAgg[0]?.total || 0;
 
         return Response.json({
             totalUsers,
@@ -126,9 +157,13 @@ export async function POST(req) {
             pendingWithdrawals,
             pendingCount,
 
-            successWithdrawalstravel,  
-            pendingWithdrawalstravel,  
-            pendingCounttravel: pendingCountTravel, 
+            successWithdrawalstravel,
+            pendingWithdrawalstravel,
+            pendingCounttravel: pendingCountTravel,
+
+            successWithdrawalsMonthly,
+            pendingWithdrawalsMonthly,
+            pendingCountMonthly,
         });
     } catch (error) {
         console.error("Error getting stats:", error);
