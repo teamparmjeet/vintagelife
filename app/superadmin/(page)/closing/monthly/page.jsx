@@ -33,7 +33,7 @@ export default function Page() {
   const handleConfirm = async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/closing/monthly', { method: 'POST' })
+      const res = await fetch('/api/newclosing/month', { method: 'POST' })
       const result = await res.json()
       alert(result.message)
       fetchData(currentPage)

@@ -108,6 +108,9 @@ export default function Page() {
           <thead>
             <tr className="bg-blue-50 text-gray-700">
               <th className="p-3 border">Name</th>
+              <th className="p-3 border">Rp Match</th>
+              <th className="p-3 border">Sao Rp</th>
+              <th className="p-3 border">Sgo Rp</th>
               <th className="p-3 border">Amount</th>
               <th className="p-3 border">Charges</th>
               <th className="p-3 border">Pay Amount</th>
@@ -122,6 +125,17 @@ export default function Page() {
                   className="hover:bg-blue-50 transition-colors"
                 >
                   <td className="p-3 border text-gray-800">{item.name}</td>
+
+                  <td className="p-3 border text-gray-800">
+                    {(parseFloat(item.amount) / 10).toLocaleString("en-IN")}
+                  </td>
+                  <td className="p-3 border text-gray-800">
+                    {(parseFloat(item.amount) / 10).toLocaleString("en-IN")}
+                  </td>
+
+                  <td className="p-3 border text-gray-800">
+                    {(parseFloat(item.amount) / 10).toLocaleString("en-IN")}
+                  </td>
                   <td className="p-3 border text-gray-800">
                     ₹{parseFloat(item.amount).toLocaleString("en-IN")}
                   </td>

@@ -79,16 +79,14 @@ export async function GET(request) {
     let totalEarnSP = 0, totalSaoSP = 0, totalSgoSP = 0;
 
     if (mainUser.group === "SAO") {
-      totalSAO += 1;
-      if (mainUser.usertype === "1") totalActiveSAO += 1;
+   
       totalEarnSP += parseFloat(mainUser.earnsp) || 0;
       totalSaoSP += parseFloat(mainUser.saosp) || 0;
       totalSgoSP += parseFloat(mainUser.sgosp) || 0;
     }
 
     if (mainUser.group === "SGO") {
-      totalSGO += 1;
-      if (mainUser.usertype === "1") totalActiveSGO += 1;
+     
       totalEarnSP += parseFloat(mainUser.earnsp) || 0;
       totalSaoSP += parseFloat(mainUser.saosp) || 0;
       totalSgoSP += parseFloat(mainUser.sgosp) || 0;

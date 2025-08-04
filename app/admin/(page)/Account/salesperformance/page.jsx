@@ -5,7 +5,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import steppending from "@/constanst/StepPending";
 export default function Page() {
   const { data: session, status } = useSession();
   const dscode = session?.user?.dscode;
@@ -52,7 +52,12 @@ export default function Page() {
   useEffect(() => {
     fetchData();
   }, [dscode]);
-
+  const getLevelByBonus = (amount) => {
+    const found = steppending.find(
+      step => parseFloat(step.bonus.replace(/[₹,\s]/g, "")) === parseFloat(amount)
+    );
+    return found ? found.level : null;
+  };
   if (status === "loading" || loading) {
     return (
       <div className="p-6 flex justify-center items-center h-40 text-lg font-medium text-gray-600">
@@ -65,7 +70,7 @@ export default function Page() {
     <div className="p-6">
       {/* Page Title */}
       <h1 className="text-3xl font-semibold mb-6 text-gray-800 border-b pb-2">
-       Royalty Income
+        Royalty Income
       </h1>
 
       {/* Date Filters */}
@@ -108,6 +113,7 @@ export default function Page() {
           <thead>
             <tr className="bg-blue-50 text-gray-700">
               <th className="p-3 border">Name</th>
+              <th className="p-3 border">Level Name</th>
               <th className="p-3 border">Amount</th>
               <th className="p-3 border">Charges</th>
               <th className="p-3 border">Pay Amount</th>
@@ -122,6 +128,15 @@ export default function Page() {
                   className="hover:bg-blue-50 transition-colors"
                 >
                   <td className="p-3 border text-gray-800">{item.name}</td>
+
+                  <td className="p-3 border text-gray-800">
+                    {(() => {
+                      const levelName = getLevelByBonus(item.amount);
+                      return levelName
+                        ? levelName
+                        : `₹${parseFloat(item.amount).toLocaleString("en-IN")}`;
+                    })()}
+                  </td>
                   <td className="p-3 border text-gray-800">
                     ₹{parseFloat(item.amount).toLocaleString("en-IN")}
                   </td>
